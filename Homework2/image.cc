@@ -347,10 +347,11 @@ void ConvertGrayScaleToBinary(Image *an_image, int threshold)
       }
       else
       {
-        an_image->SetPixel(i, j, an_image->num_gray_levels());
+        an_image->SetPixel(i, j, 255);
       }
     }
   }
+  an_image->SetNumberGrayLevels(1);
 }
 
 } // namespace ComputerVisionProjects
