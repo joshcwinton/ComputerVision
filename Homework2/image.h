@@ -8,8 +8,9 @@
 #include <cstdlib>
 #include <string>
 
-namespace ComputerVisionProjects {
- 
+namespace ComputerVisionProjects
+{
+
 // Class for representing a gray-scale image.
 // Sample usage:
 //   Image one_image;
@@ -21,13 +22,14 @@ namespace ComputerVisionProjects {
 //       one_image.SetPixel(i, j, 150);
 //   WriteImage("output_file.pgm", an_image);
 //   // See image_demo.cc for read/write image.
-class Image {
- public:
-  Image(): num_rows_{0}, num_columns_{0}, 
-	   num_gray_levels_{0}, pixels_{nullptr} { }
-  
+class Image
+{
+public:
+  Image() : num_rows_{0}, num_columns_{0},
+            num_gray_levels_{0}, pixels_{nullptr} {}
+
   Image(const Image &an_image);
-  Image& operator=(const Image &an_image) = delete;
+  Image &operator=(const Image &an_image) = delete;
 
   ~Image();
 
@@ -38,28 +40,33 @@ class Image {
   size_t num_rows() const { return num_rows_; }
   size_t num_columns() const { return num_columns_; }
   size_t num_gray_levels() const { return num_gray_levels_; }
-  void SetNumberGrayLevels(size_t gray_levels) {
+  void SetNumberGrayLevels(size_t gray_levels)
+  {
     num_gray_levels_ = gray_levels;
   }
- 
+
   // Sets the pixel in the image at row i and column j
   // to a particular gray_level.
-  void SetPixel(size_t i, size_t j, int gray_level) {
-    if (i >= num_rows_ || j >= num_columns_) abort();
+  void SetPixel(size_t i, size_t j, int gray_level)
+  {
+    if (i >= num_rows_ || j >= num_columns_)
+      abort();
     pixels_[i][j] = gray_level;
   }
 
-  int GetPixel(size_t i, size_t j) const {
-    if (i >= num_rows_ || j >= num_columns_) abort();
+  int GetPixel(size_t i, size_t j) const
+  {
+    if (i >= num_rows_ || j >= num_columns_)
+      abort();
     return pixels_[i][j];
   }
 
- private:
+private:
   void DeallocateSpace();
 
-  size_t num_rows_; 
-  size_t num_columns_; 
-  size_t num_gray_levels_;  
+  size_t num_rows_;
+  size_t num_columns_;
+  size_t num_gray_levels_;
   int **pixels_;
 };
 
@@ -73,12 +80,16 @@ bool ReadImage(const std::string &input_filename, Image *an_image);
 bool WriteImage(const std::string &output_filename, const Image &an_image);
 
 //  Draws a line of given gray-level color from (x0,y0) to (x1,y1);
-//  an_image is the input/output image. 
-// IMPORTANT: (x0,y0) and (x1,y1) can lie outside the image 
+//  an_image is the input/output image.
+// IMPORTANT: (x0,y0) and (x1,y1) can lie outside the image
 //   boundaries, so SetPixel() should check the coordinates passed to it.
 void DrawLine(int x0, int y0, int x1, int y1, int color,
-	      Image *an_image);
+              Image *an_image);
 
-}  // namespace ComputerVisionProjects
+// Converts entire gray-level input image to binary
+// Pixels above threshold set to white, below set to black
+void ConvertGrayScaleToBinary(Image *an_image, int threshold);
 
-#endif  // COMPUTER_VISION_IMAGE_H_
+} // namespace ComputerVisionProjects
+
+#endif // COMPUTER_VISION_IMAGE_H_

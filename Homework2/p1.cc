@@ -9,25 +9,6 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
-void ConvertGrayScaleToBinary(Image *an_image, int threshold)
-{
-  cout << an_image->GetPixel(0, 0) << endl;
-  for (int i = 0; i < an_image->num_rows(); i++)
-  {
-    for (int j = 0; j < an_image->num_columns(); j++)
-    {
-      if (an_image->GetPixel(i, j) <= threshold)
-      {
-        an_image->SetPixel(i, j, 0);
-      }
-      else
-      {
-        an_image->SetPixel(i, j, an_image->num_gray_levels());
-      }
-    }
-  }
-}
-
 int main(int argc, char **argv)
 {
 
@@ -47,11 +28,8 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  // // Draw a line from (0, 0) to (100, 240) having gray-value
-  // // 200.
-  // DrawLine(0, 0, 100, 240, 200,
-  //          &an_image);
-
+  // Set all pixels with value above "threshold" to max value
+  // Set all pixels with value below "threshold" to min value
   ConvertGrayScaleToBinary(&an_image, threshold);
 
   if (!WriteImage(output_file, an_image))
