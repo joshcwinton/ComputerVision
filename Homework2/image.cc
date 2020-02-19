@@ -8,6 +8,8 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <queue>
+#include <utility>
 
 using namespace std;
 
@@ -354,4 +356,101 @@ void ConvertGrayScaleToBinary(Image *an_image, int threshold)
   an_image->SetNumberGrayLevels(1);
 }
 
+// For each pixel in the image, check neighbors and based on their values, set new pixel value
+void LabelImage(Image *an_image)
+{
+  int next_label = 1;
+  int labels[an_image->num_rows()][an_image->num_columns()];
+  queue<pair<int, int>> label_queue;
+
+  // initialize labels
+  for (int i = 0; i < an_image->num_rows(); i++)
+  {
+    for (int j = 0; j < an_image->num_columns(); j++)
+    {
+      labels[i][j] = -1;
+    }
+  }
+
+  // set labels
+  /**
+  for (int i = 0; i < an_image->num_rows(); i++)
+  {
+    for (int j = 0; j < an_image->num_columns(); j++)
+    {
+      size_t current_val = an_image->GetPixel(i, j);
+
+      // if foreground pixel and not already labelled
+      if (current_val && (labels[i][j] == -1))
+      {
+        // give it current label and add it as the first element in a queue
+        labels[i][j] = next_label;
+        pair<int, int> pixel(i, j);
+        label_queue.push(pixel);
+      }
+      // background pixel or already labeled
+      else
+      {
+        // go to next pixel
+        continue;
+      }
+
+      // 3
+      // pop element from queue and look at its neighbors
+
+      while (!label_queue.empty())
+      {
+        pair<int, int> queue_pixel(label_queue.front());
+        label_queue.pop();
+
+        int up;
+        int upLeft;
+        int left;
+
+        if (queue_pixel.first > 0)
+        {
+          up = an_image->GetPixel(queue_pixel.first - 1, queue_pixel.second);
+          if (labels[queue_pixel.first - 1][queue_pixel.second] == -1)
+          {
+            labels[queue_pixel.first - 1][queue_pixel.second] = next_label;
+            pair<int, int> pixel(queue_pixel.first - 1, queue_pixel.second);
+            label_queue.push(pixel);
+          }
+        }
+
+        if (queue_pixel.second > 0)
+        {
+          left = an_image->GetPixel(queue_pixel.first, queue_pixel.second - 1);
+          if (labels[queue_pixel.first][queue_pixel.second - 1] == -1)
+          {
+            labels[queue_pixel.first][queue_pixel.second - 1] = next_label;
+            pair<int, int> pixel(queue_pixel.first, queue_pixel.second - 1);
+            label_queue.push(pixel);
+          }
+        }
+
+        if ((queue_pixel.first > 0) && (queue_pixel.second > 0))
+        {
+          upLeft = an_image->GetPixel(queue_pixel.first - 1, queue_pixel.second - 1);
+          if (labels[queue_pixel.first - 1][queue_pixel.second - 1] == -1)
+          {
+            labels[queue_pixel.first - 1][queue_pixel.second - 1] = next_label;
+            pair<int, int> pixel(queue_pixel.first - 1, queue_pixel.second - 1);
+            label_queue.push(pixel);
+          }
+        }
+
+        next_label++;
+      }
+    }
+  }
+  */
+  for (int i = 0; i < an_image->num_rows(); i++)
+  {
+    for (int j = 0; j < an_image->num_columns(); j++)
+    {
+      an_image->SetPixel(i, j, labels[i][j]);
+    }
+  }
+}
 } // namespace ComputerVisionProjects

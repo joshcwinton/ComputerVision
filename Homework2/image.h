@@ -26,7 +26,7 @@ class Image
 {
 public:
   Image() : num_rows_{0}, num_columns_{0},
-            num_gray_levels_{0}, pixels_{nullptr} {}
+            num_gray_levels_{0}, pixels_{nullptr} {};
 
   Image(const Image &an_image);
   Image &operator=(const Image &an_image) = delete;
@@ -89,6 +89,9 @@ void DrawLine(int x0, int y0, int x1, int y1, int color,
 // Converts entire gray-level input image to binary
 // Pixels above threshold set to white, below set to black
 void ConvertGrayScaleToBinary(Image *an_image, int threshold);
+
+// Sets new gray-levels as labels for different objects
+void LabelImage(Image *an_image);
 
 } // namespace ComputerVisionProjects
 

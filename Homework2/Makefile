@@ -14,18 +14,26 @@ INCLUDES= -I.
 #-->All libraries (without LEDA)
 LIBS_ALL =  -L/usr/lib -L/usr/local/lib 
 
-#First Program (ListTest)
-Cpp_OBJ=image.o p1.o
+image.o: image.cc
+	g++ $(C++FLAG) image.cc -c -o image.o
 
-PROGRAM_NAME=p1
+p1.o: p1.cc
+	g++ $(C++FLAG) p1.cc -c -o p1.o
 
-$(PROGRAM_NAME): $(Cpp_OBJ)
-	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ) $(INCLUDES) $(LIBS_ALL)
+p1: p1.o image.o
+	g++ $(C++FLAG) p1.o image.o -o p1
+
+p2.o: p2.cc
+	g++ $(C++FLAG) p2.cc -c -o p2.o
+
+p2: p2.o image.o
+	g++ $(C++FLAG) p2.o image.o -o p2
 
 all:
-	make $(PROGRAM_NAME)
+	make p1
+	make p2
 
 clean:
-	(rm -f *.o; rm p1)
+	(rm -f *.o; rm p1 p2)
 
 (:
