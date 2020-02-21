@@ -8,8 +8,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace ComputerVisionProjects
-{
+namespace ComputerVisionProjects {
 
 // Class for representing a gray-scale image.
 // Sample usage:
@@ -22,11 +21,10 @@ namespace ComputerVisionProjects
 //       one_image.SetPixel(i, j, 150);
 //   WriteImage("output_file.pgm", an_image);
 //   // See image_demo.cc for read/write image.
-class Image
-{
+class Image {
 public:
-  Image() : num_rows_{0}, num_columns_{0},
-            num_gray_levels_{0}, pixels_{nullptr} {};
+  Image()
+      : num_rows_{0}, num_columns_{0}, num_gray_levels_{0}, pixels_{nullptr} {};
 
   Image(const Image &an_image);
   Image &operator=(const Image &an_image) = delete;
@@ -40,22 +38,19 @@ public:
   size_t num_rows() const { return num_rows_; }
   size_t num_columns() const { return num_columns_; }
   size_t num_gray_levels() const { return num_gray_levels_; }
-  void SetNumberGrayLevels(size_t gray_levels)
-  {
+  void SetNumberGrayLevels(size_t gray_levels) {
     num_gray_levels_ = gray_levels;
   }
 
   // Sets the pixel in the image at row i and column j
   // to a particular gray_level.
-  void SetPixel(size_t i, size_t j, int gray_level)
-  {
+  void SetPixel(size_t i, size_t j, int gray_level) {
     if (i >= num_rows_ || j >= num_columns_)
       abort();
     pixels_[i][j] = gray_level;
   }
 
-  int GetPixel(size_t i, size_t j) const
-  {
+  int GetPixel(size_t i, size_t j) const {
     if (i >= num_rows_ || j >= num_columns_)
       abort();
     return pixels_[i][j];
@@ -83,8 +78,7 @@ bool WriteImage(const std::string &output_filename, const Image &an_image);
 //  an_image is the input/output image.
 // IMPORTANT: (x0,y0) and (x1,y1) can lie outside the image
 //   boundaries, so SetPixel() should check the coordinates passed to it.
-void DrawLine(int x0, int y0, int x1, int y1, int color,
-              Image *an_image);
+void DrawLine(int x0, int y0, int x1, int y1, int color, Image *an_image);
 
 // Converts entire gray-level input image to binary
 // Pixels above threshold set to white, below set to black

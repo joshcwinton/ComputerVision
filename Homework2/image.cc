@@ -349,32 +349,34 @@ void LabelImage(Image *an_image) {
         }
 
         // check for down
-        if (queue_pixel.first < an_image->num_rows()-1){
+        if (queue_pixel.first < an_image->num_rows() - 1) {
           down = an_image->GetPixel(queue_pixel.first + 1, queue_pixel.second);
-          if((down > 0) && (labels[queue_pixel.first+1][queue_pixel.second] == -1)){
-            labels[queue_pixel.first+1][queue_pixel.second] = current_label;
-            pair<int, int> pixel(queue_pixel.first+1, queue_pixel.second);
+          if ((down > 0) &&
+              (labels[queue_pixel.first + 1][queue_pixel.second] == -1)) {
+            labels[queue_pixel.first + 1][queue_pixel.second] = current_label;
+            pair<int, int> pixel(queue_pixel.first + 1, queue_pixel.second);
             label_queue.push(pixel);
           }
         }
 
-
         // check for left
-        if (queue_pixel.second > 0){
-          left = an_image->GetPixel(queue_pixel.first, queue_pixel.second-1);
-          if((left > 0) && (labels[queue_pixel.first][queue_pixel.second-1] == -1)){
-            labels[queue_pixel.first][queue_pixel.second-1] = current_label;
-            pair<int, int> pixel(queue_pixel.first, queue_pixel.second-1);
+        if (queue_pixel.second > 0) {
+          left = an_image->GetPixel(queue_pixel.first, queue_pixel.second - 1);
+          if ((left > 0) &&
+              (labels[queue_pixel.first][queue_pixel.second - 1] == -1)) {
+            labels[queue_pixel.first][queue_pixel.second - 1] = current_label;
+            pair<int, int> pixel(queue_pixel.first, queue_pixel.second - 1);
             label_queue.push(pixel);
           }
         }
 
         // check for right
-        if (queue_pixel.second < an_image->num_columns()-1){
-          right = an_image->GetPixel(queue_pixel.first, queue_pixel.second+1);
-          if((right > 0) && (labels[queue_pixel.first][queue_pixel.second+1] == -1)){
-            labels[queue_pixel.first][queue_pixel.second+1] = current_label;
-            pair<int, int> pixel(queue_pixel.first, queue_pixel.second+1);
+        if (queue_pixel.second < an_image->num_columns() - 1) {
+          right = an_image->GetPixel(queue_pixel.first, queue_pixel.second + 1);
+          if ((right > 0) &&
+              (labels[queue_pixel.first][queue_pixel.second + 1] == -1)) {
+            labels[queue_pixel.first][queue_pixel.second + 1] = current_label;
+            pair<int, int> pixel(queue_pixel.first, queue_pixel.second + 1);
             label_queue.push(pixel);
           }
         }
@@ -387,10 +389,10 @@ void LabelImage(Image *an_image) {
 
   for (int i = 0; i < an_image->num_rows(); i++) {
     for (int j = 0; j < an_image->num_columns(); j++) {
-      if(labels[i][j] == -1){
+      if (labels[i][j] == -1) {
         labels[i][j] = 0;
       }
-      labels[i][j]*=25;
+      labels[i][j] *= 25;
       an_image->SetPixel(i, j, labels[i][j]);
     }
   }

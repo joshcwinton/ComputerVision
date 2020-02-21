@@ -17,6 +17,9 @@ LIBS_ALL =  -L/usr/lib -L/usr/local/lib
 image.o: image.cc
 	g++ $(C++FLAG) image.cc -c -o image.o
 
+database.o: database.cc
+	g++ $(C++FLAG) database.cc -c -o database.o
+
 p1.o: p1.cc
 	g++ $(C++FLAG) p1.cc -c -o p1.o
 
@@ -29,9 +32,16 @@ p2.o: p2.cc
 p2: p2.o image.o
 	g++ $(C++FLAG) p2.o image.o -o p2
 
+p3.o: p3.cc 
+	g++ $(C++FLAG) p3.cc -c -o p3.o
+
+p3: p3.o image.o database.o
+	g++ $(C++FLAG) p3.o image.o database.o -o p3
+
 all:
 	make p1
 	make p2
+	make p3
 
 clean:
 	(rm -f *.o; rm p1 p2)
