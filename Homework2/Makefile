@@ -17,7 +17,7 @@ LIBS_ALL =  -L/usr/lib -L/usr/local/lib
 image.o: image.cc
 	g++ $(C++FLAG) image.cc -c -o image.o
 
-database.o: database.cc
+database.o: database.cc database.h
 	g++ $(C++FLAG) database.cc -c -o database.o
 
 p1.o: p1.cc
