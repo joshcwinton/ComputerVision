@@ -61,4 +61,33 @@ void Database::BuildObjectMapFromLabeledImage(const Image *labeled_image)
     }
   }
 }
+
+int Database::GetAverageRowOfObject(int label)
+{
+  vector<pair<int, int>> objectPixels = objectMap[label];
+  int num_pixels = objectPixels.size();
+  int row_sum = 0;
+
+  for (int i = 0; i < num_pixels; i++)
+  {
+    row_sum += objectPixels[i].first;
+  }
+
+  return row_sum / num_pixels;
+}
+
+int Database::GetAverageColumnOfObject(int label)
+{
+  vector<pair<int, int>> objectPixels = objectMap[label];
+  int num_pixels = objectPixels.size();
+  int col_sum = 0;
+
+  for (int i = 0; i < num_pixels; i++)
+  {
+    col_sum += objectPixels[i].second;
+  }
+
+  return col_sum / num_pixels;
+}
+
 } // namespace ComputerVisionProjects
