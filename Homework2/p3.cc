@@ -9,9 +9,11 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 
-  if (argc != 3) {
+  if (argc != 3)
+  {
     printf("Usage: %s file1 file2\n", argv[0]);
     return 0;
   }
@@ -19,12 +21,16 @@ int main(int argc, char **argv) {
   const string output_file(argv[2]);
 
   Image an_image;
-  if (!ReadImage(input_file, &an_image)) {
+  if (!ReadImage(input_file, &an_image))
+  {
     cout << "Can't open file " << input_file << endl;
     return 0;
   }
 
-  if (!WriteImage(output_file, an_image)) {
+  Database object_database(&an_image);
+
+  if (!WriteImage(output_file, an_image))
+  {
     cout << "Can't write to file " << output_file << endl;
     return 0;
   }
