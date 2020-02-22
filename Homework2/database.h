@@ -42,10 +42,19 @@ public:
   };
 };
 
-// Takes a label and a map from labels to pixels
-// Computes
+/* // Takes a label and a map from labels to pixels
+// Computes average row value of all pixels in object
 int GetAverageRowOfObject(const int label, const unordered_map<int, vector<pair<int, int>>> objectMap);
 
+// Takes a label and a map from labels to pixels
+// Computes average column value of all pixels in object
+int GetAverageColumnOfObject(const int label, const unordered_map<int, vector<pair<int, int>>> objectMap);
+
+// Given a label and an unordered map
+// Find the minimum momemnt of inertia
+// int GetMinimumMomentOfInertia(const int label, const unordered_map<int, vector<pair<int, int>>> objectMap);
+ */
+// namespace ComputerVisionProjects
 } // namespace ComputerVisionProjects
 
 #endif // COMPUTER_VISION_DATABASE_H
