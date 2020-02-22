@@ -8,7 +8,8 @@
 #include <cstdlib>
 #include <string>
 
-namespace ComputerVisionProjects {
+namespace ComputerVisionProjects
+{
 
 // Class for representing a gray-scale image.
 // Sample usage:
@@ -21,7 +22,8 @@ namespace ComputerVisionProjects {
 //       one_image.SetPixel(i, j, 150);
 //   WriteImage("output_file.pgm", an_image);
 //   // See image_demo.cc for read/write image.
-class Image {
+class Image
+{
 public:
   Image()
       : num_rows_{0}, num_columns_{0}, num_gray_levels_{0}, pixels_{nullptr} {};
@@ -38,19 +40,22 @@ public:
   size_t num_rows() const { return num_rows_; }
   size_t num_columns() const { return num_columns_; }
   size_t num_gray_levels() const { return num_gray_levels_; }
-  void SetNumberGrayLevels(size_t gray_levels) {
+  void SetNumberGrayLevels(size_t gray_levels)
+  {
     num_gray_levels_ = gray_levels;
   }
 
   // Sets the pixel in the image at row i and column j
   // to a particular gray_level.
-  void SetPixel(size_t i, size_t j, int gray_level) {
+  void SetPixel(size_t i, size_t j, int gray_level)
+  {
     if (i >= num_rows_ || j >= num_columns_)
       abort();
     pixels_[i][j] = gray_level;
   }
 
-  int GetPixel(size_t i, size_t j) const {
+  int GetPixel(size_t i, size_t j) const
+  {
     if (i >= num_rows_ || j >= num_columns_)
       abort();
     return pixels_[i][j];
