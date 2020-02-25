@@ -87,15 +87,22 @@ public:
   // Builds centers map using object map
   void GetAllCentersFromObjectMap();
 
+  // Builds map from label to a vector containing (a, b, c)
+  void GetMinimumMomentsOfInertia();
+
+  // Builds map from label to orientation as represented by theta
+  void GetThetas();
+
+  // Output database info
+  void PrintDatabase();
+
+  // Update image with database info
+  void DrawOnImage();
+
   size_t num_objects() const
   {
     return objectMap.bucket_count();
   };
-
-  // Builds map from label to a vector containing (a, b, c)
-  void GetMinimumMomentsOfInertia();
-
-  void GetThetas();
 };
 
 // Takes a label and a map from labels to pixels

@@ -29,6 +29,8 @@ int main(int argc, char **argv)
 
   Database object_database(&an_image);
 
+  object_database.PrintDatabase();
+
   if (!WriteImage(output_file, an_image))
   {
     cout << "Can't write to file " << output_file << endl;

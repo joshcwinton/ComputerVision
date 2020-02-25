@@ -7,7 +7,8 @@
 
 using namespace std;
 
-size_t THRESHOLD_SIZE = 20;
+#define THRESHOLD_SIZE 20
+#define PI 3.14159265
 
 namespace ComputerVisionProjects
 {
@@ -28,10 +29,7 @@ Database::Database(const Image *labeled_image)
 
 void Database::BuildObjectMapFromLabeledImage(const Image *labeled_image)
 {
-  cout << "Building database..." << endl;
   // Search for objects, first foreground pixel is first object
-  cout << "columns: " << labeled_image->num_columns() << " rows: " << labeled_image->num_rows() << endl;
-
   for (size_t i = 0; i < labeled_image->num_rows(); i++)
   {
     for (size_t j = 0; j < labeled_image->num_columns(); j++)
@@ -70,8 +68,6 @@ void Database::BuildObjectMapFromLabeledImage(const Image *labeled_image)
       ++it;
     }
   }
-
-  cout << endl;
 }
 
 int Database::GetAverageRowOfObject(int label)
@@ -104,7 +100,6 @@ int Database::GetAverageColumnOfObject(int label)
 
 void Database::GetAllCentersFromObjectMap()
 {
-  cout << "Getting centers..." << endl;
   vector<int> labels = GetAllLabels();
   for (int label : labels)
   {
@@ -112,21 +107,15 @@ void Database::GetAllCentersFromObjectMap()
     int avg_col = GetAverageColumnOfObject(label);
     pair<int, int> center(avg_row, avg_col);
     centers[label] = center;
-    cout << "Label: " << label << " Center: " << avg_row << ", " << avg_col << endl;
   }
-  cout << endl;
 }
 
 void Database::GetMinimumMomentsOfInertia()
 {
-  cout << "Getting minimum moments of inertia..." << endl;
-
   vector<int> labels = GetAllLabels();
 
   for (int label : labels)
   {
-    cout << "label: " << label << endl;
-
     pair<int, int> center = centers[label];
 
     int a = 0;
@@ -146,7 +135,6 @@ void Database::GetMinimumMomentsOfInertia()
 
     if (minimumMoments[label].size() == 0)
     {
-      cout << a << " " << b << " " << c << endl;
       minimumMoments[label].push_back(a);
       minimumMoments[label].push_back(b);
       minimumMoments[label].push_back(c);
@@ -156,31 +144,59 @@ void Database::GetMinimumMomentsOfInertia()
       abort();
     }
   }
-
-  cout << endl;
 }
 
 void Database::GetThetas()
 {
-  cout << "Calculating orientations..." << endl;
-
   vector<int> labels = GetAllLabels();
   for (int label : labels)
   {
     double theta;
 
     vector<int> sums = minimumMoments[label];
+    cout << "hello" << endl;
+    double a = sums[0];
+    double b = sums[1];
+    double c = sums[2];
 
-    int a = sums[0];
-    int b = sums[1];
-    int c = sums[2];
+    cout << a << endl;
+    cout << b << endl;
+    cout << c << endl;
 
-    theta = 0.5 * atan(b / (a - c));
+    theta = 0.5 * atan(b / (a - c)) * 180 / PI;
+
+    cout << theta << endl;
 
     thetas[label] = -theta;
   }
+}
 
-  cout << endl;
+// {label}{row center}{column center}{minimum moment of inertia}{orientation}
+void Database::PrintDatabase()
+{
+  vector<int> labels = GetAllLabels();
+
+  for (int label : labels)
+  {
+    // object label
+    cout << label << " ";
+
+    // row center
+    cout << centers[label].first << " ";
+
+    // column center
+    cout << centers[label].second << " ";
+
+    // minimum moment of inertia
+    cout << minimumMoments[label][0] << " "
+         << minimumMoments[label][1] << " "
+         << minimumMoments[label][2] << " ";
+
+    // orientation
+    cout << thetas[label];
+
+    cout << endl;
+  }
 }
 
 } // namespace ComputerVisionProjects
