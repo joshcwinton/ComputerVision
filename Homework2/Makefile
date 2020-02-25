@@ -44,6 +44,6 @@ all:
 	make p3
 
 clean:
-	(rm -f *.o; rm p1 p2)
+	(rm -f *.o; rm p1 p2 p3)
 
 (:

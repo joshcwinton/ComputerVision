@@ -26,6 +26,21 @@ private:
   // Stores vectors of pixel pairs corresponding to a label
   unordered_map<int, vector<pair<int, int>>> objectMap;
 
+  // Maps label to center of object
+  unordered_map<int, pair<int, int>> centers;
+
+  // Maps labels to [a, b, c]
+  unordered_map<int, vector<int>> minimumMoments;
+
+  // Maps labels to areas
+  unordered_map<int, int> areas;
+
+  // Maps labels to theta that gives orientation
+  unordered_map<int, double> thetas;
+
+  // copy of pointer to image
+  const Image *an_image;
+
 public:
   // ~Database();
   Database(const Image *labeled_image);
@@ -69,10 +84,18 @@ public:
   // Computes average column value of all pixels in object
   int GetAverageColumnOfObject(int label);
 
+  // Builds centers map using object map
+  void GetAllCentersFromObjectMap();
+
   size_t num_objects() const
   {
     return objectMap.bucket_count();
   };
+
+  // Builds map from label to a vector containing (a, b, c)
+  void GetMinimumMomentsOfInertia();
+
+  void GetThetas();
 };
 
 // Takes a label and a map from labels to pixels

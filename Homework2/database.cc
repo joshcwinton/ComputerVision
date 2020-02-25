@@ -3,6 +3,7 @@
 
 #include "database.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -13,12 +14,21 @@ namespace ComputerVisionProjects
 
 Database::Database(const Image *labeled_image)
 {
+  an_image = labeled_image;
+
   BuildObjectMapFromLabeledImage(labeled_image);
+
+  GetAllCentersFromObjectMap();
+
+  GetMinimumMomentsOfInertia();
+
+  GetThetas();
+  // GetAreas();
 }
 
 void Database::BuildObjectMapFromLabeledImage(const Image *labeled_image)
 {
-  cout << "building database" << endl;
+  cout << "Building database..." << endl;
   // Search for objects, first foreground pixel is first object
   cout << "columns: " << labeled_image->num_columns() << " rows: " << labeled_image->num_rows() << endl;
 
@@ -60,6 +70,8 @@ void Database::BuildObjectMapFromLabeledImage(const Image *labeled_image)
       ++it;
     }
   }
+
+  cout << endl;
 }
 
 int Database::GetAverageRowOfObject(int label)
@@ -88,6 +100,87 @@ int Database::GetAverageColumnOfObject(int label)
   }
 
   return col_sum / num_pixels;
+}
+
+void Database::GetAllCentersFromObjectMap()
+{
+  cout << "Getting centers..." << endl;
+  vector<int> labels = GetAllLabels();
+  for (int label : labels)
+  {
+    int avg_row = GetAverageRowOfObject(label);
+    int avg_col = GetAverageColumnOfObject(label);
+    pair<int, int> center(avg_row, avg_col);
+    centers[label] = center;
+    cout << "Label: " << label << " Center: " << avg_row << ", " << avg_col << endl;
+  }
+  cout << endl;
+}
+
+void Database::GetMinimumMomentsOfInertia()
+{
+  cout << "Getting minimum moments of inertia..." << endl;
+
+  vector<int> labels = GetAllLabels();
+
+  for (int label : labels)
+  {
+    cout << "label: " << label << endl;
+
+    pair<int, int> center = centers[label];
+
+    int a = 0;
+    int b = 0;
+    int c = 0;
+
+    // loop over all pixels under that label and update abc
+    for (pair<int, int> pixel : objectMap[label])
+    {
+
+      a += (pixel.first - center.first) * (pixel.first - center.first);
+      b += (pixel.first - center.first) * (pixel.second - center.second);
+      c += (pixel.second - center.second) * (pixel.second - center.second);
+    }
+
+    b *= 2;
+
+    if (minimumMoments[label].size() == 0)
+    {
+      cout << a << " " << b << " " << c << endl;
+      minimumMoments[label].push_back(a);
+      minimumMoments[label].push_back(b);
+      minimumMoments[label].push_back(c);
+    }
+    else
+    {
+      abort();
+    }
+  }
+
+  cout << endl;
+}
+
+void Database::GetThetas()
+{
+  cout << "Calculating orientations..." << endl;
+
+  vector<int> labels = GetAllLabels();
+  for (int label : labels)
+  {
+    double theta;
+
+    vector<int> sums = minimumMoments[label];
+
+    int a = sums[0];
+    int b = sums[1];
+    int c = sums[2];
+
+    theta = 0.5 * atan(b / (a - c));
+
+    thetas[label] = -theta;
+  }
+
+  cout << endl;
 }
 
 } // namespace ComputerVisionProjects
