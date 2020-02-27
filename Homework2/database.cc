@@ -53,21 +53,6 @@ void Database::BuildObjectMapFromLabeledImage(const Image *labeled_image)
       }
     }
   }
-
-  // Now each hash table entry corresponds to an object
-
-  // Remove objects with less than THRESHOLD_SIZE pixels
-  for (auto it = objectMap.begin(); it != objectMap.end();)
-  {
-    if (it->second.size() < THRESHOLD_SIZE)
-    {
-      objectMap.erase(it++);
-    }
-    else
-    {
-      ++it;
-    }
-  }
 }
 
 int Database::GetAverageRowOfObject(int label)
@@ -118,6 +103,7 @@ void Database::GetMinimumMomentsOfInertia()
   {
     pair<int, int> center = centers[label];
 
+    int count = 0;
     int a = 0;
     int b = 0;
     int c = 0;
@@ -125,23 +111,27 @@ void Database::GetMinimumMomentsOfInertia()
     // loop over all pixels under that label and update abc
     for (pair<int, int> pixel : objectMap[label])
     {
-
-      a += (pixel.first - center.first) * (pixel.first - center.first);
+      count++;
+      a += (pixel.second - center.second) * (pixel.second - center.second);
       b += (pixel.first - center.first) * (pixel.second - center.second);
-      c += (pixel.second - center.second) * (pixel.second - center.second);
+      c += (pixel.first - center.first) * (pixel.first - center.first);
     }
 
     b *= 2;
 
-    if (minimumMoments[label].size() == 0)
+    if (minimumMoments.find(label) == minimumMoments.end())
+    {
+      vector<int> temp;
+      temp.push_back(a);
+      temp.push_back(b);
+      temp.push_back(c);
+      minimumMoments[label] = temp;
+    }
+    else
     {
       minimumMoments[label].push_back(a);
       minimumMoments[label].push_back(b);
       minimumMoments[label].push_back(c);
-    }
-    else
-    {
-      abort();
     }
   }
 }
@@ -154,18 +144,12 @@ void Database::GetThetas()
     double theta;
 
     vector<int> sums = minimumMoments[label];
-    cout << "hello" << endl;
+
     double a = sums[0];
     double b = sums[1];
     double c = sums[2];
 
-    cout << a << endl;
-    cout << b << endl;
-    cout << c << endl;
-
-    theta = 0.5 * atan(b / (a - c)) * 180 / PI;
-
-    cout << theta << endl;
+    theta = 0.5 * atan2(b, (a - c));
 
     thetas[label] = -theta;
   }
@@ -176,26 +160,70 @@ void Database::PrintDatabase()
 {
   vector<int> labels = GetAllLabels();
 
+  cout << "label\t"
+       << "row\t"
+       << "column\t"
+       << "E\t"
+       << "theta" << endl;
+
   for (int label : labels)
   {
     // object label
-    cout << label << " ";
+    cout << label << "\t";
 
     // row center
-    cout << centers[label].first << " ";
+    cout << centers[label].first << "\t";
 
     // column center
-    cout << centers[label].second << " ";
+    cout << centers[label].second << "\t";
 
     // minimum moment of inertia
-    cout << minimumMoments[label][0] << " "
-         << minimumMoments[label][1] << " "
-         << minimumMoments[label][2] << " ";
-
+    int a = minimumMoments[label][0];
+    int b = minimumMoments[label][1];
+    int c = minimumMoments[label][2];
+    int t = thetas[label];
+    int E = (a * pow(sin(t), 2)) - (b * sin(t) * cos(t)) + (c * pow(cos(t), 2));
+    cout << E << "\t";
     // orientation
     cout << thetas[label];
 
     cout << endl;
+  }
+}
+
+void Database::DrawOnImage(Image *an_image)
+{
+  vector<int> labels = GetAllLabels();
+
+  int color = an_image->num_gray_levels();
+  an_image->SetNumberGrayLevels(color + 1);
+
+  for (int label : labels)
+  {
+    // get center of object
+    pair<int, int> center = centers[label];
+    // get slope
+    double slope = tan(-thetas[label]);
+    // get endpoint for slope
+    pair<int, int> endpoint(center.first + (slope * 10), center.second + 10);
+    // draw line
+    if (endpoint.first > an_image->num_rows())
+    {
+      endpoint.first = center.first - (slope * 10);
+      // center.first+(slope*10) =
+    }
+    if (endpoint.second > an_image->num_columns())
+    {
+    }
+    if ((endpoint.first > an_image->num_rows()) || (endpoint.second > an_image->num_columns()))
+    {
+      cout << "ERROR" << endl;
+      abort();
+    }
+    else
+    {
+      DrawLine(center.first, center.second, endpoint.first, endpoint.second, color, an_image);
+    }
   }
 }
 
