@@ -97,21 +97,13 @@ public:
   void PrintDatabase();
 
   // Update image with database info
-  void DrawOnImage();
+  void DrawOnImage(Image *an_image);
 
   size_t num_objects() const
   {
     return objectMap.bucket_count();
   };
 };
-
-// Takes a label and a map from labels to pixels
-// Computes average column value of all pixels in object
-// int GetAverageColumnOfObject(const int label, const unordered_map<int, vector<pair<int, int>>> objectMap);
-
-// Given a label and an unordered map
-// Find the minimum momemnt of inertia
-// int GetMinimumMomentOfInertia(const int label, const unordered_map<int, vector<pair<int, int>>> objectMap);
 
 // namespace ComputerVisionProjects
 } // namespace ComputerVisionProjects
