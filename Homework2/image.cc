@@ -283,7 +283,7 @@ void DrawLine(int x0, int y0, int x1, int y1, int color, Image *an_image) {
 void ConvertGrayScaleToBinary(Image *an_image, int threshold) {
   for (int i = 0; i < an_image->num_rows(); i++) {
     for (int j = 0; j < an_image->num_columns(); j++) {
-      if (an_image->GetPixel(i, j) <= threshold) {
+      if (an_image->GetPixel(i, j) < threshold) {
         an_image->SetPixel(i, j, 0);
       } else {
         an_image->SetPixel(i, j, 255);
@@ -392,7 +392,6 @@ void LabelImage(Image *an_image) {
       if (labels[i][j] == -1) {
         labels[i][j] = 0;
       }
-      labels[i][j] *= 25;
       an_image->SetPixel(i, j, labels[i][j]);
     }
   }
