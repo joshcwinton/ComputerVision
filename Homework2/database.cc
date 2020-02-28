@@ -3,6 +3,7 @@
 
 #include "database.h"
 #include <iostream>
+#include <fstream>
 #include <cmath>
 
 using namespace std;
@@ -207,17 +208,8 @@ void Database::DrawOnImage(Image *an_image)
     // get endpoint for slope
     pair<int, int> endpoint(center.first + (slope * 10), center.second + 10);
     // draw line
-    if (endpoint.first > an_image->num_rows())
-    {
-      endpoint.first = center.first - (slope * 10);
-      // center.first+(slope*10) =
-    }
-    if (endpoint.second > an_image->num_columns())
-    {
-    }
     if ((endpoint.first > an_image->num_rows()) || (endpoint.second > an_image->num_columns()))
     {
-      cout << "ERROR" << endl;
       abort();
     }
     else
@@ -225,6 +217,47 @@ void Database::DrawOnImage(Image *an_image)
       DrawLine(center.first, center.second, endpoint.first, endpoint.second, color, an_image);
     }
   }
+}
+
+// Write db info to text file
+void Database::WriteDatabaseToFile(string database_file)
+{
+  ofstream dbfile;
+  dbfile.open(database_file);
+
+  vector<int> labels = GetAllLabels();
+
+  dbfile << "label\t"
+         << "row\t"
+         << "column\t"
+         << "E\t"
+         << "theta" << endl;
+
+  for (int label : labels)
+  {
+    // object label
+    dbfile << label << "\t";
+
+    // row center
+    dbfile << centers[label].first << "\t";
+
+    // column center
+    dbfile << centers[label].second << "\t";
+
+    // minimum moment of inertia
+    int a = minimumMoments[label][0];
+    int b = minimumMoments[label][1];
+    int c = minimumMoments[label][2];
+    int t = thetas[label];
+    int E = (a * pow(sin(t), 2)) - (b * sin(t) * cos(t)) + (c * pow(cos(t), 2));
+    dbfile << E << "\t";
+    // orientation
+    dbfile << thetas[label];
+
+    dbfile << endl;
+  }
+
+  dbfile.close();
 }
 
 } // namespace ComputerVisionProjects
