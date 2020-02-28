@@ -96,6 +96,9 @@ public:
   // Output database info
   void PrintDatabase();
 
+  // Write db info to text file
+  void WriteDatabaseToFile(string database_file);
+
   // Update image with database info
   void DrawOnImage(Image *an_image);
 
