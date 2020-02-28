@@ -1,17 +1,18 @@
 PARTS COMPLETED
 Part 1: 
   - Program that converts grayscale pgm to binary using a given threshold
-  - I used 75 for the threshold
+  - I used 120 for the threshold
 
 Part 2:
   - Program that displays segmented objects with different grayscale values
-  - Multiplied actual labels by 25 to get distinguishable colors
   - Algorithm based on the one described at: [https://en.wikipedia.org/wiki/Connected-component_labeling#One_component_at_a_time]
 
 Part 3:
-  - 
+  - Program that generates a database based on a labeled image and then draws lines to indicate orientation
+
 BUGS ENCOUNTERED
-- N/A
+- Triggered abort when drawing lines that go off edge of image
+- Viewing pgm through mac preview didn't properly display gray levels
 
 INSTRUCTIONS
 Part 1:
@@ -25,7 +26,9 @@ Part 2:
   - ./p2 {inputimage} {outputimage}
 
 Part 3:
-
+  - make clean
+  - make p3
+  - ./p3 {inputimage} {outputimage}
 
 INPUT/OUTPUT FILES
 Part 1:
@@ -33,7 +36,10 @@ Part 1:
   Output: p1Output.pgm
 
 Part 2:
-  Input: objects.pgm
+  Input: p1Output.pgm
   Output: p2Output.pgm
 
 Part 3:
+  Input: p2Output.pgm
+  Output: p3Output.pgm, p3Database.txt
+
