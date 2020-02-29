@@ -38,12 +38,16 @@ p3.o: p3.cc
 p3: p3.o image.o database.o
 	g++ $(C++FLAG) p3.o image.o database.o -o p3
 
+p4.o: p4.cc
+	g++ $(C++FLAG) p4.cc -c -o p4.o
+
+p4: p4.o image.o database.o
+	g++ $(C++FLAG) p4.o image.o database.o -o p4
+
 all:
-	make p1
-	make p2
-	make p3
+	make p1 p2 p3 p4
 
 clean:
-	(rm -f *.o; rm p1 p2 p3)
+	(rm -f *.o; rm p1 p2 p3 p4)
 
 (:
