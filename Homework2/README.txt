@@ -28,7 +28,7 @@ Part 2:
 Part 3:
   - make clean
   - make p3
-  - ./p3 {inputimage} {outputimage}
+  - ./p3 {inputimage} {outputdatabse} {outputimage}
 
 INPUT/OUTPUT FILES
 Part 1:
@@ -43,3 +43,6 @@ Part 3:
   Input: p2Output.pgm
   Output: p3Output.pgm, p3Database.txt
 
+Part 4:
+  Input: p2Output.pgm, p3Database.txt
+  Output: p4Output.pgm 
