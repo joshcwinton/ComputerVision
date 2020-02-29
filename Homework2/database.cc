@@ -260,4 +260,17 @@ void Database::WriteDatabaseToFile(string database_file)
   dbfile.close();
 }
 
+double Database::GetRoundnessByLabel(int label)
+{
+  int a = minimumMoments[label][0];
+  int b = minimumMoments[label][1];
+  int c = minimumMoments[label][2];
+  int min_theta = thetas[label];
+  int max_theta = min_theta + (PI / 2);
+  double E_min = (a * pow(sin(min_theta), 2)) - (b * sin(min_theta) * cos(min_theta)) + (c * pow(cos(min_theta), 2));
+  double E_max = (a * pow(sin(max_theta), 2)) - (b * sin(max_theta) * cos(max_theta)) + (c * pow(cos(max_theta), 2));
+  double roundness = E_min / E_max;
+  return roundness;
+}
+
 } // namespace ComputerVisionProjects

@@ -102,6 +102,8 @@ public:
   // Update image with database info
   void DrawOnImage(Image *an_image);
 
+  double GetRoundnessByLabel(int label);
+
   size_t num_objects() const
   {
     return objectMap.bucket_count();
