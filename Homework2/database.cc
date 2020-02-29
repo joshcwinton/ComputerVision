@@ -219,6 +219,42 @@ void Database::DrawOnImage(Image *an_image)
   }
 }
 
+void Database::DrawSelectedLabelsOnImage(Image *an_image, vector<int> labels)
+{
+  vector<int> alabels = GetAllLabels();
+
+  for (int label : labels)
+  {
+    cout << label << endl;
+  }
+  cout << endl;
+  for (int label : alabels)
+  {
+    cout << label << endl;
+  }
+  int color = an_image->num_gray_levels();
+  an_image->SetNumberGrayLevels(color + 1);
+
+  for (int label : labels)
+  {
+    // get center of object
+    pair<int, int> center = centers[label];
+    // get slope
+    double slope = tan(-thetas[label]);
+    // get endpoint for slope
+    pair<int, int> endpoint(center.first + (slope * 10), center.second + 10);
+    // draw line
+    if ((endpoint.first > an_image->num_rows()) || (endpoint.second > an_image->num_columns()))
+    {
+      abort();
+    }
+    else
+    {
+      DrawLine(center.first, center.second, endpoint.first, endpoint.second, color, an_image);
+    }
+  }
+}
+
 // Write db info to text file
 void Database::WriteDatabaseToFile(string database_file)
 {
@@ -231,7 +267,9 @@ void Database::WriteDatabaseToFile(string database_file)
          << "row\t"
          << "column\t"
          << "E\t"
-         << "theta" << endl;
+         << "theta\t"
+         << "roundness"
+         << endl;
 
   for (int label : labels)
   {
@@ -252,7 +290,10 @@ void Database::WriteDatabaseToFile(string database_file)
     int E = (a * pow(sin(t), 2)) - (b * sin(t) * cos(t)) + (c * pow(cos(t), 2));
     dbfile << E << "\t";
     // orientation
-    dbfile << thetas[label];
+    dbfile << thetas[label] << "\t";
+
+    // roundness
+    dbfile << GetRoundnessByLabel(label);
 
     dbfile << endl;
   }

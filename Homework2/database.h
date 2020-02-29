@@ -102,6 +102,9 @@ public:
   // Update image with database info
   void DrawOnImage(Image *an_image);
 
+  // Given an image and a set of labels, draw lines on image only for those labels
+  void DrawSelectedLabelsOnImage(Image *an_image, vector<int> labels);
+
   double GetRoundnessByLabel(int label);
 
   size_t num_objects() const
