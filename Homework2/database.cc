@@ -221,17 +221,6 @@ void Database::DrawOnImage(Image *an_image)
 
 void Database::DrawSelectedLabelsOnImage(Image *an_image, vector<int> labels)
 {
-  vector<int> alabels = GetAllLabels();
-
-  for (int label : labels)
-  {
-    cout << label << endl;
-  }
-  cout << endl;
-  for (int label : alabels)
-  {
-    cout << label << endl;
-  }
   int color = an_image->num_gray_levels();
   an_image->SetNumberGrayLevels(color + 1);
 
@@ -268,7 +257,8 @@ void Database::WriteDatabaseToFile(string database_file)
          << "column\t"
          << "E\t"
          << "theta\t"
-         << "roundness"
+         << "roundness\t"
+         << "area"
          << endl;
 
   for (int label : labels)
@@ -293,7 +283,10 @@ void Database::WriteDatabaseToFile(string database_file)
     dbfile << thetas[label] << "\t";
 
     // roundness
-    dbfile << GetRoundnessByLabel(label);
+    dbfile << GetRoundnessByLabel(label) << "\t";
+
+    // area
+    dbfile << GetAreaByLabel(label);
 
     dbfile << endl;
   }
@@ -312,6 +305,18 @@ double Database::GetRoundnessByLabel(int label)
   double E_max = (a * pow(sin(max_theta), 2)) - (b * sin(max_theta) * cos(max_theta)) + (c * pow(cos(max_theta), 2));
   double roundness = E_min / E_max;
   return roundness;
+}
+
+int Database::GetAreaByLabel(int label)
+{
+  if (objectMap.find(label) != objectMap.end())
+  {
+    return objectMap[label].size();
+  }
+  else
+  {
+    return -1;
+  }
 }
 
 } // namespace ComputerVisionProjects
