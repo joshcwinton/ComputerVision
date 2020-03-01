@@ -107,6 +107,9 @@ public:
 
   double GetRoundnessByLabel(int label);
 
+  // Return area given label if it exists, else return -1
+  int GetAreaByLabel(int label);
+
   size_t num_objects() const
   {
     return objectMap.bucket_count();
