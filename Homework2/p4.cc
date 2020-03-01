@@ -7,50 +7,43 @@
 #include <fstream>
 #include <string>
 
+// used to compare objects using area
+#define MAX_AREA_DIFFERENCE 200
+
 using namespace std;
 using namespace ComputerVisionProjects;
 
-int getLabel(string line)
+// Split string into vector where:
+// 0 is label
+// 1 is row
+// 2 is column
+// 3 is min E
+// 4 is theta
+// 5 is roundness
+// 6 is area
+vector<string> parseLine(string line)
 {
-  string label = "";
+  vector<string> return_vector;
+  string temp_string;
   for (int i = 0; i < line.length(); i++)
   {
-    if (line[i] == ' ')
+    if (line[i] == '\t')
     {
-      break;
+      return_vector.push_back(temp_string);
+      temp_string = "";
+    }
+    else if (i == line.length() - 1)
+    {
+      temp_string += line[i];
+      return_vector.push_back(temp_string);
+      temp_string = "";
     }
     else
     {
-      label += line[i];
+      temp_string += line[i];
     }
   }
-  return stoi(label);
-}
-
-double getRoundness(string line)
-{
-  string roundness = "";
-  stack<char> t;
-
-  for (int i = line.length() - 1; i >= 0; i--)
-  {
-    if ((line[i] == ' ') || (line[i] == '\t'))
-    {
-      break;
-    }
-    else
-    {
-      t.push(line[i]);
-    }
-  }
-
-  while (!t.empty())
-  {
-    roundness += t.top();
-    t.pop();
-  }
-
-  return stod(roundness);
+  return return_vector;
 }
 
 int main(int argc, char **argv)
@@ -76,7 +69,10 @@ int main(int argc, char **argv)
   Database new_image_database(&an_image);
 
   // generate map from label to roundness for old database
-  unordered_map<int, double> old_roundness;
+  unordered_map<int, double> old_roundnesses;
+  // generate map from label to area for old database
+  unordered_map<int, int> old_areas;
+
   string line;
 
   ifstream dbstream(input_database);
@@ -87,9 +83,13 @@ int main(int argc, char **argv)
 
     while (getline(dbstream, line))
     {
-      int label = getLabel(line);
-      double roundness = getRoundness(line);
-      old_roundness[label] = roundness;
+      vector<string> objectInfo;
+      objectInfo = parseLine(line);
+      int label = stoi(objectInfo[0]);
+      double roundness = stod(objectInfo[5]);
+      int area = stoi(objectInfo[6]);
+      old_roundnesses[label] = roundness;
+      old_areas[label] = area;
     }
 
     dbstream.close();
@@ -99,23 +99,32 @@ int main(int argc, char **argv)
     cout << "Unable to open file";
   }
 
+  // genrate map from label to area for old database
+
   // for each label in the new database
   vector<int> new_db_labels = new_image_database.GetAllLabels();
   vector<int> matches;
 
   for (int label : new_db_labels)
   {
-    // search the old database for a label with similar roundness
-    for (pair<int, double> element : old_roundness)
-    {
+    // search the old database for a label with similar area
+    // after finding matching area, compare inertia
+    // if both match, add to db
+    int new_area = new_image_database.GetAreaByLabel(label);
 
-      if (abs(element.second - new_image_database.GetRoundnessByLabel(label)) < 0.001)
+    for (pair<int, double> element : old_areas)
+    {
+      int old_area = element.second;
+
+      if (abs(old_area - new_area) < MAX_AREA_DIFFERENCE)
       {
         // keep list of new labels that resulted in a match
         matches.push_back(label);
       }
     }
   }
+
+  cout << matches.size() << " matches found\n";
 
   // for each of those matching labels, draw on image
   new_image_database.DrawSelectedLabelsOnImage(&an_image, matches);
