@@ -17,7 +17,7 @@ Part 4:
 BUGS ENCOUNTERED
 - Triggered abort when drawing lines that go off edge of image
 - Viewing pgm through mac preview didn't properly display gray levels
-- Didn't get exact matches across images using roundness, didn't find a modified metric to get good matches
+- Didn't get exact matches across images using roundness, used area instead
 
 INSTRUCTIONS
 Part 1:
@@ -42,7 +42,7 @@ Part 4:
 
 INPUT/OUTPUT FILES
 Part 1:
-  Input: objects.pgm
+  Input: two_objects.pgm
   Output: p1Output.pgm
 
 Part 2:
@@ -54,5 +54,5 @@ Part 3:
   Output: p3Output.pgm, p3Database.txt
 
 Part 4:
-  Input: p2Output.pgm, p3Database.txt
+  Input: many_objects_1.pgm, p3Database.txt
   Output: p4Output.pgm 
