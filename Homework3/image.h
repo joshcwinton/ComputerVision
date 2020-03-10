@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <string>
+#define THRESHOLD 1
 
 namespace ComputerVisionProjects
 {
@@ -61,26 +62,7 @@ public:
     return pixels_[i][j];
   }
 
-  void ApplySquaredGradientOperator()
-  {
-    // loop through all pixels
-    for (size_t i = 0; i < num_rows(); i++)
-    {
-      for (size_t j = 0; j < num_columns(); j++)
-      {
-        // not sure this order is right
-        int a = GetPixel(i, j);
-        int b = GetPixel(i, j + 1);
-        int c = GetPixel(i + 1, j);
-        int d = GetPixel(i + 1, j + 1);
-        //
-        int sum1 =
-      }
-    }
-    // for each pixel calculate x derivative and y derivative
-    // if sum of x and y > threshold, set pixel in new array
-    // go back and write new values to image
-  }
+  void ApplySquaredGradientOperator();
 
 private:
   void DeallocateSpace();
@@ -106,6 +88,9 @@ bool WriteImage(const std::string &output_filename, const Image &an_image);
 //   boundaries, so SetPixel() should check the coordinates passed to it.
 void DrawLine(int x0, int y0, int x1, int y1, int color,
               Image *an_image);
+
+int Convolve(int A[2][2], int B[2][2]);
+
 } // namespace ComputerVisionProjects
 
 #endif // COMPUTER_VISION_IMAGE_H_
