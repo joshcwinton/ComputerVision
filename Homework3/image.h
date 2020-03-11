@@ -9,6 +9,8 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
+
 namespace ComputerVisionProjects
 {
 
@@ -68,7 +70,9 @@ public:
   // Applies squared gradient + sobel operator to image in place
   void ApplySquaredGradientSobelOperator();
 
-  void GenerateHoughImage(Image &hough_image);
+  // Creates an image and writes voting array to output_file
+  // First line gives rows and columns
+  void GenerateHoughImageAndFile(Image &hough_image, const string output_file);
 
 private:
   void DeallocateSpace();

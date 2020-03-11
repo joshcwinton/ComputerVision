@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  an_image.GenerateHoughImage(hough_image);
+  an_image.GenerateHoughImageAndFile(hough_image, output_hough_array);
 
   if (!WriteImage(output_hough_image, hough_image))
   {

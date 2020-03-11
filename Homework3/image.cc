@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <fstream>
 #include <queue>
 #include <string>
 #include <utility>
@@ -533,7 +534,7 @@ void Image::ApplySquaredGradientSobelOperator()
   }
 }
 
-void Image::GenerateHoughImage(Image &hough_image)
+void Image::GenerateHoughImageAndFile(Image &hough_image, const string output_file)
 {
   // Initialize hough array + image
   int max_rho = sqrt(pow(num_rows(), 2) + pow(num_columns(), 2));
@@ -612,6 +613,28 @@ void Image::GenerateHoughImage(Image &hough_image)
   }
 
   hough_image.SetNumberGrayLevels(255);
+
+  // BEGIN FILE WRITE
+  ofstream hough_file(output_file);
+  if (hough_file.is_open())
+  {
+    // write array to file
+    hough_file << rho_buckets << " " << theta_buckets << endl;
+
+    for (int i = 0; i < rho_buckets; i++)
+    {
+      for (int j = 0; j < theta_buckets; j++)
+      {
+        hough_file << hough_array[i][j] << " ";
+      }
+      hough_file << endl;
+    }
+    hough_file.close();
+  }
+  else
+  {
+    cout << "Unable to open voting array file" << endl;
+  }
 }
 
 const int Convolve3(int A[3][3], int B[3][3])
@@ -628,7 +651,5 @@ const int Convolve3(int A[3][3], int B[3][3])
 
   return sum;
 }
-
-
 
 } // namespace ComputerVisionProjects
