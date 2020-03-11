@@ -41,13 +41,15 @@ int main(int argc, char **argv)
   int max_rho = sqrt(pow(an_image.num_rows(), 2) + pow(an_image.num_columns(), 2));
   double max_theta = M_PI;
   int d_rho = 2;
-  int d_theta = M_PI / 180; // 1 degree
+  double d_theta = M_PI / 360; // 1 degree in radians
 
   // how many samples for rho and theta
   int rho_buckets = max_rho / d_rho;
-  int theta_buckets = 180;
+  int theta_buckets = 360;
 
-  // create accumulator array
+  // create accumulator array A(1..R,1..T)
+  // R is number of samples for rho
+  // T is number of samples for theta
   int hough_array[rho_buckets][theta_buckets];
 
   // Set A(k, h) to zero everywhere in A
@@ -66,7 +68,17 @@ int main(int argc, char **argv)
     {
       if (an_image.GetPixel(i, j) >= 1)
       {
-        // fill in
+        // for h = 1..T
+        for (int h = 0; h < theta_buckets; h++)
+        {
+          // compute rho = ...formula in slides
+          double theta_dh = h * d_theta;
+          double rho = (i * cos(theta_dh)) + (j * sin(theta_dh));
+          // find index k, index k that corresponds to rho
+          int k = rho / d_rho;
+
+          hough_array[k][h] += 1;
+        }
       }
     }
   }
@@ -91,8 +103,10 @@ int main(int argc, char **argv)
   {
     for (int j = 0; j < theta_buckets; j++)
     {
-      int t = hough_array[i][j];
-      hough_image.SetPixel(i, j, t);
+      double h = hough_array[i][j];
+      double v = max_votes;
+      double b = h / v * 255;
+      hough_image.SetPixel(i, j, b);
     }
   }
 
