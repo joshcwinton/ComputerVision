@@ -1,26 +1,31 @@
+PARTS COMPLETED
+Part 1: 
+  - Program that locates edges in a gray level image and generates an "edge" image where the intensity at each point is proportional to edge magnitude
+  - Used Squared Gradient Sobel operator as convolution mask
 
-Sample code that reads/writes pgm images and that draws lines on the images is provided.
+Part 2:
+   - Program that thresholds the image so that only strong edges remain
+   - Used code from previous assignment
+   - Kind of tricky to get strong edges only without deleting some edges, I used threshold = 65
 
-image.* : Image class (2-D array of integers, along with size, number of colors)
-                      (For our purposes the number of colors is 256)
+Part 3:
+   
+INSTRUCTIONS
+Part 1:
+  - make clean
+  - make h1
+  - ./h1 {inputimage} {outputimage}
 
-image_demo.cc : Sample main() function for testing.
+Part 2:
+   - make clean
+   - make h2
+   - ./h2 {inputimage} {threshold} {outputimage}
 
-----------------------
-To compile in Linux:
-----------
- 
-   make all
+INPUT/OUTPUT FILES
+Part 1:
+  Input: hough_simple_1.pgm
+  Output: h1Output.pgm
 
-To run:
----------
-
-./image_demo objects.pgm objects_output.pgm
-
-This will open image objects.pgm, will draw a line on the image, and will save resulting image to file objects_output.pgm
-
------------
-
-To view .pgm files you can use the open source program gimp:
-
-https://www.gimp.org/
+Part 2:
+   Input: h1Output.pgm
+   Output: h2Output.pgm
