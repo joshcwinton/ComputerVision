@@ -68,6 +68,8 @@ public:
   // Applies squared gradient + sobel operator to image in place
   void ApplySquaredGradientSobelOperator();
 
+  void GenerateHoughImage(Image &hough_image);
+
 private:
   void DeallocateSpace();
 

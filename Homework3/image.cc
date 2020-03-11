@@ -533,6 +533,87 @@ void Image::ApplySquaredGradientSobelOperator()
   }
 }
 
+void Image::GenerateHoughImage(Image &hough_image)
+{
+  // Initialize hough array + image
+  int max_rho = sqrt(pow(num_rows(), 2) + pow(num_columns(), 2));
+  double max_theta = M_PI;
+  int d_rho = 2;
+  double d_theta = M_PI / 360; // 1 degree in radians
+
+  // how many samples for rho and theta
+  int rho_buckets = max_rho / d_rho;
+  int theta_buckets = 360;
+
+  // create accumulator array A(1..R,1..T)
+  // R is number of samples for rho
+  // T is number of samples for theta
+  int hough_array[rho_buckets][theta_buckets];
+
+  // Set A(k, h) to zero everywhere in A
+  for (int i = 0; i < rho_buckets; i++)
+  {
+    for (int j = 0; j < theta_buckets; j++)
+    {
+      hough_array[i][j] = 0;
+    }
+  }
+
+  // For all pixels (i, j) such that E(i, j) is 1
+  for (int i = 0; i < num_rows(); i++)
+  {
+    for (int j = 0; j < num_columns(); j++)
+    {
+      if (GetPixel(i, j) >= 1)
+      {
+        // for h = 1..T
+        for (int h = 0; h < theta_buckets; h++)
+        {
+          // compute rho = ...formula in slides
+          double theta_dh = h * d_theta;
+          double rho = (i * cos(theta_dh)) + (j * sin(theta_dh));
+          // find index k, index k that corresponds to rho
+          int k = rho / d_rho;
+          // vote
+          hough_array[k][h] += 1;
+        }
+      }
+    }
+  }
+
+  // Draw array as image
+  hough_image.AllocateSpaceAndSetSize(rho_buckets, theta_buckets);
+
+  // find max votes for scaling
+  int max_votes = 1;
+
+  for (int i = 0; i < rho_buckets; i++)
+  {
+    for (int j = 0; j < theta_buckets; j++)
+    {
+      if (hough_array[i][j] > max_votes)
+      {
+        max_votes = hough_array[i][j];
+      }
+    }
+  }
+
+  // write output array to image
+  for (int i = 0; i < rho_buckets; i++)
+  {
+    for (int j = 0; j < theta_buckets; j++)
+    {
+      double h = hough_array[i][j];
+      double v = max_votes;
+      // scale votes to range from brightness 0 to 255
+      double b = h / v * 255;
+      hough_image.SetPixel(i, j, b);
+    }
+  }
+
+  hough_image.SetNumberGrayLevels(255);
+}
+
 const int Convolve3(int A[3][3], int B[3][3])
 {
   int sum = 0;
@@ -547,5 +628,7 @@ const int Convolve3(int A[3][3], int B[3][3])
 
   return sum;
 }
+
+
 
 } // namespace ComputerVisionProjects

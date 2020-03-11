@@ -4,12 +4,13 @@ Part 1:
   - Used Squared Gradient Sobel operator as convolution mask
 
 Part 2:
-   - Program that thresholds the image so that only strong edges remain
-   - Used code from previous assignment
-   - Kind of tricky to get strong edges only without deleting some edges, I used threshold = 65
+  - Program that thresholds the image so that only strong edges remain
+  - Used code from previous assignment
+  - Kind of tricky to get strong edges only without deleting some edges, I used threshold = 65
 
 Part 3:
-   
+  - Program that applies Hough transform to produce an image that represents lines in the rho/theta space
+
 INSTRUCTIONS
 Part 1:
   - make clean
@@ -21,11 +22,20 @@ Part 2:
    - make h2
    - ./h2 {inputimage} {threshold} {outputimage}
 
+Part 3: 
+  - make clean 
+  - make h3 
+  - ./h3 {input-binary-edge-image} {output-gray-level-hough-image} {output-hough-voting-array}
+
 INPUT/OUTPUT FILES
 Part 1:
   Input: hough_simple_1.pgm
   Output: h1Output.pgm
 
 Part 2:
-   Input: h1Output.pgm
-   Output: h2Output.pgm
+  Input: h1Output.pgm
+  Output: h2Output.pgm
+
+Part 3:
+  Input: h2Output.pgm
+  Output: h3Output.pgm, h3Output.txt
