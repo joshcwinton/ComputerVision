@@ -36,9 +36,9 @@ h3: h3.o image.o
 	g++ $(C++FLAG) h3.o image.o -o h3
 
 all:
-	make h1 h2
+	make h1 h2 h3
 
 clean:
-	(rm -f *.o; rm h1 h2)
+	(rm -f *.o; rm h1 h2 h3)
 
 (:
