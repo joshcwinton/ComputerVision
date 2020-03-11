@@ -32,7 +32,9 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  an_image.ApplySquaredGradientOperator();
+  // an_image.ApplySquaredGradientOperator();
+  // an_image.ApplyFirstDerivativeOperator();
+  an_image.ApplySquaredGradientSobelOperator();
 
   if (!WriteImage(output_file, an_image))
   {

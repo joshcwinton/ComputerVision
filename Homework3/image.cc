@@ -7,7 +7,10 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <queue>
 #include <string>
+#include <utility>
+#include <cmath>
 
 using namespace std;
 
@@ -26,10 +29,7 @@ Image::Image(const Image &an_image)
     }
 }
 
-Image::~Image()
-{
-  DeallocateSpace();
-}
+Image::~Image() { DeallocateSpace(); }
 
 void Image::AllocateSpaceAndSetSize(size_t num_rows, size_t num_columns)
 {
@@ -148,8 +148,7 @@ bool WriteImage(const string &filename, const Image &an_image)
 // (adapted from J.D.Foley, A. van Dam, S.K.Feiner, J.F.Hughes
 // "Computer Graphics. Principles and practice",
 // 2nd ed., 1990, section 3.2.2);
-void DrawLine(int x0, int y0, int x1, int y1, int color,
-              Image *an_image)
+void DrawLine(int x0, int y0, int x1, int y1, int color, Image *an_image)
 {
   if (an_image == nullptr)
     abort();
@@ -168,11 +167,7 @@ void DrawLine(int x0, int y0, int x1, int y1, int color,
   const int DIR_Y = 1;
 
   // Increments: East, North-East, South, South-East, North.
-  int incrE,
-      incrNE,
-      incrS,
-      incrSE,
-      incrN;
+  int incrE, incrNE, incrS, incrSE, incrN;
   int d;      /* the D */
   int x, y;   /* running coordinates */
   int mpCase; /* midpoint algorithm's case */
@@ -335,54 +330,221 @@ void DrawLine(int x0, int y0, int x1, int y1, int color,
   }
 }
 
-void Image::ApplySquaredGradientOperator()
+void ConvertGrayScaleToBinary(Image *an_image, int threshold)
 {
-  // loop through all pixels
-  for (size_t i = 0; i < num_rows(); i++)
+  for (int i = 0; i < an_image->num_rows(); i++)
   {
-    for (size_t j = 0; j < num_columns(); j++)
+    for (int j = 0; j < an_image->num_columns(); j++)
     {
-      // get pixels for I
-      int a = GetPixel(i, j);
-      int b = GetPixel(i, j + 1);
-      int c = GetPixel(i + 1, j);
-      int d = GetPixel(i + 1, j + 1);
-      // construct I
-      int I[2][2] = {{a, b}, {c, d}};
-      // construct delta 1 and 2
-      int delta1[2][2] = {{-1, 1}, {-1, 1}};
-      int delta2[2][2] = {{1, 1}, {-1, -1}};
-      // perform convolution
-      int I1 = Convolve(I, delta1);
-      int I2 = Convolve(I, delta2);
-
-      if ((I1 * I1) + (I2 * I2) > THRESHOLD)
+      if (an_image->GetPixel(i, j) < threshold)
       {
-        SetPixel(i, j, 1);
+        an_image->SetPixel(i, j, 0);
       }
       else
       {
-        SetPixel(i, j, 0);
+        an_image->SetPixel(i, j, 255);
       }
     }
   }
-  // for each pixel calculate x derivative and y derivative
-  // if sum of x and y > threshold, set pixel in new array
-  // go back and write new values to image
-
-  SetNumberGrayLevels(0);
+  an_image->SetNumberGrayLevels(1);
 }
 
-int Convolve(int A[2][2], int B[2][2])
+// For each pixel in the image, check neighbors and based on their values, set
+// new pixel value
+void LabelImage(Image *an_image)
 {
-  int sum = 0;
-  for (size_t i = 0; i < 2; i++)
+  int current_label = 1;
+  int labels[an_image->num_rows()][an_image->num_columns()];
+  queue<pair<int, int>> label_queue;
+
+  // initialize labels
+  for (int i = 0; i < an_image->num_rows(); i++)
   {
-    for (size_t j = 0; j < 2; j++)
+    for (int j = 0; j < an_image->num_columns(); j++)
     {
-      sum += (A[i][j] + B[i][j]);
+      labels[i][j] = -1;
     }
   }
+
+  // set labels
+  for (int i = 0; i < an_image->num_rows(); i++)
+  {
+    for (int j = 0; j < an_image->num_columns(); j++)
+    {
+      size_t current_val = an_image->GetPixel(i, j);
+
+      // if foreground pixel and not already labelled
+      if ((current_val > 0) && (labels[i][j] == -1))
+      {
+        // give it current label and add it as the first element in a queue
+        labels[i][j] = current_label;
+        pair<int, int> pixel(i, j);
+        label_queue.push(pixel);
+      }
+      // background pixel or already labeled
+      else
+      {
+        // go to next pixel
+        continue;
+      }
+
+      // 3
+      // pop element from queue and look at its neighbors
+
+      while (!label_queue.empty())
+      {
+        pair<int, int> queue_pixel(label_queue.front());
+        label_queue.pop();
+
+        int up;
+        int down;
+        int left;
+        int right;
+
+        // check for up
+        if (queue_pixel.first > 0)
+        {
+          up = an_image->GetPixel(queue_pixel.first - 1, queue_pixel.second);
+          if ((up > 0) &&
+              (labels[queue_pixel.first - 1][queue_pixel.second] == -1))
+          {
+            labels[queue_pixel.first - 1][queue_pixel.second] = current_label;
+            pair<int, int> pixel(queue_pixel.first - 1, queue_pixel.second);
+            label_queue.push(pixel);
+          }
+        }
+
+        // check for down
+        if (queue_pixel.first < an_image->num_rows() - 1)
+        {
+          down = an_image->GetPixel(queue_pixel.first + 1, queue_pixel.second);
+          if ((down > 0) &&
+              (labels[queue_pixel.first + 1][queue_pixel.second] == -1))
+          {
+            labels[queue_pixel.first + 1][queue_pixel.second] = current_label;
+            pair<int, int> pixel(queue_pixel.first + 1, queue_pixel.second);
+            label_queue.push(pixel);
+          }
+        }
+
+        // check for left
+        if (queue_pixel.second > 0)
+        {
+          left = an_image->GetPixel(queue_pixel.first, queue_pixel.second - 1);
+          if ((left > 0) &&
+              (labels[queue_pixel.first][queue_pixel.second - 1] == -1))
+          {
+            labels[queue_pixel.first][queue_pixel.second - 1] = current_label;
+            pair<int, int> pixel(queue_pixel.first, queue_pixel.second - 1);
+            label_queue.push(pixel);
+          }
+        }
+
+        // check for right
+        if (queue_pixel.second < an_image->num_columns() - 1)
+        {
+          right = an_image->GetPixel(queue_pixel.first, queue_pixel.second + 1);
+          if ((right > 0) &&
+              (labels[queue_pixel.first][queue_pixel.second + 1] == -1))
+          {
+            labels[queue_pixel.first][queue_pixel.second + 1] = current_label;
+            pair<int, int> pixel(queue_pixel.first, queue_pixel.second + 1);
+            label_queue.push(pixel);
+          }
+        }
+      }
+      current_label++;
+    }
+  }
+
+  an_image->SetNumberGrayLevels(current_label);
+
+  for (int i = 0; i < an_image->num_rows(); i++)
+  {
+    for (int j = 0; j < an_image->num_columns(); j++)
+    {
+      if (labels[i][j] == -1)
+      {
+        labels[i][j] = 0;
+      }
+      an_image->SetPixel(i, j, labels[i][j]);
+    }
+  }
+}
+
+void Image::ApplySquaredGradientSobelOperator()
+{
+  // box filter convolved with first deriv filters
+  int delta1[3][3] = {
+      {1, 0, -1},
+      {2, 0, -2},
+      {1, 0, -1}};
+
+  int delta2[3][3] = {
+      {1, 2, 1},
+      {0, 0, 0},
+      {-1, -2, -1}};
+
+  // temporary storage of pixel values
+  int output[num_rows()][num_columns()];
+
+  // used to scale brightness
+  int max_output = 0;
+
+  // Apply convolution
+  for (int i = 1; i < num_rows() - 1; i++)
+  {
+    for (int j = 1; j < num_columns() - 1; j++)
+    {
+      int r = GetPixel(i - 1, j - 1);
+      int s = GetPixel(i - 1, j);
+      int t = GetPixel(i - 1, j + 1);
+      int u = GetPixel(i, j - 1);
+      int v = GetPixel(i, j);
+      int w = GetPixel(i, j + 1);
+      int x = GetPixel(i + 1, j - 1);
+      int y = GetPixel(i + 1, j);
+      int z = GetPixel(i + 1, j + 1);
+
+      int frame[3][3] = {{r, s, t},
+                         {u, v, w},
+                         {x, y, z}};
+
+      int i1 = Convolve3(frame, delta1);
+      int i2 = Convolve3(frame, delta2);
+
+      int result = sqrt((i1 * i1) + (i2 * i2));
+
+      output[i][j] = result;
+
+      if (result > max_output)
+      {
+        max_output = result;
+      }
+    }
+  }
+
+  for (int i = 0; i < num_rows(); i++)
+  {
+    for (int j = 0; j < num_columns(); j++)
+    {
+      SetPixel(i, j, output[i][j]);
+    }
+  }
+}
+
+const int Convolve3(int A[3][3], int B[3][3])
+{
+  int sum = 0;
+
+  for (int i = 0; i < 3; i++)
+  {
+    for (int j = 0; j < 3; j++)
+    {
+      sum += (A[i][j] * B[i][j]);
+    }
+  }
+
   return sum;
 }
 

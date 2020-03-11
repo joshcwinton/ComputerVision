@@ -7,7 +7,7 @@
 
 #include <cstdlib>
 #include <string>
-#define THRESHOLD 1
+#include <iostream>
 
 namespace ComputerVisionProjects
 {
@@ -26,8 +26,8 @@ namespace ComputerVisionProjects
 class Image
 {
 public:
-  Image() : num_rows_{0}, num_columns_{0},
-            num_gray_levels_{0}, pixels_{nullptr} {}
+  Image()
+      : num_rows_{0}, num_columns_{0}, num_gray_levels_{0}, pixels_{nullptr} {};
 
   Image(const Image &an_image);
   Image &operator=(const Image &an_image) = delete;
@@ -58,11 +58,15 @@ public:
   int GetPixel(size_t i, size_t j) const
   {
     if (i >= num_rows_ || j >= num_columns_)
+    {
+      std::cout << "pixel out of range" << std::endl;
       abort();
+    }
     return pixels_[i][j];
   }
 
-  void ApplySquaredGradientOperator();
+  // Applies squared gradient + sobel operator to image in place
+  void ApplySquaredGradientSobelOperator();
 
 private:
   void DeallocateSpace();
@@ -86,10 +90,17 @@ bool WriteImage(const std::string &output_filename, const Image &an_image);
 //  an_image is the input/output image.
 // IMPORTANT: (x0,y0) and (x1,y1) can lie outside the image
 //   boundaries, so SetPixel() should check the coordinates passed to it.
-void DrawLine(int x0, int y0, int x1, int y1, int color,
-              Image *an_image);
+void DrawLine(int x0, int y0, int x1, int y1, int color, Image *an_image);
 
-int Convolve(int A[2][2], int B[2][2]);
+// Converts entire gray-level input image to binary
+// Pixels above threshold set to white, below set to black
+void ConvertGrayScaleToBinary(Image *an_image, int threshold);
+
+// Sets new gray-levels as labels for different objects
+void LabelImage(Image *an_image);
+
+// Applies convolution operation to two 3x3 matrices and returns sum
+const int Convolve3(int A[3][3], int B[3][3]);
 
 } // namespace ComputerVisionProjects
 
