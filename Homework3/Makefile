@@ -35,10 +35,16 @@ h3.o: h3.cc
 h3: h3.o image.o
 	g++ $(C++FLAG) h3.o image.o -o h3
 
+h4.o: h4.cc
+	g++ $(C++FLAG) h4.cc -c -o h4.o
+
+h4: h4.o image.o
+	g++ $(C++FLAG) h4.o image.o -o h4
+
 all:
-	make h1 h2 h3
+	make h1 h2 h3 h4
 
 clean:
-	(rm -f *.o; rm h1 h2 h3)
+	(rm -f *.o; rm h1 h2 h3 h4)
 
 (:

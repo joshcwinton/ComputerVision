@@ -6,10 +6,16 @@ Part 1:
 Part 2:
   - Program that thresholds the image so that only strong edges remain
   - Used code from previous assignment
-  - Kind of tricky to get strong edges only without deleting some edges, I used threshold = 65
+  - Kind of tricky to get strong edges only without deleting some edges, I used THRESHOLD = 65
 
 Part 3:
   - Program that applies Hough transform to produce an image that represents lines in the rho/theta space
+
+Part 4:
+  - Converts Hough array to an image
+  - Uses Image member functions to detect centers of areas of brightness using a given threshold
+  - Uses detected centers as lines in the image from its Hough Transform space 
+  - Draws the detected lines on a copy of the original scene image
 
 INSTRUCTIONS
 Part 1:
@@ -27,6 +33,11 @@ Part 3:
   - make h3 
   - ./h3 {input-binary-edge-image} {output-gray-level-hough-image} {output-hough-voting-array}
 
+Part 4:
+  - make clean
+  - make h4
+  - ./h4 {input-original-gray-level-image} {input-hough-voting-array} {input-hough-threshold-value} {output-gray-level-line-image}
+
 INPUT/OUTPUT FILES
 Part 1:
   Input: hough_simple_1.pgm
@@ -39,3 +50,7 @@ Part 2:
 Part 3:
   Input: h2Output.pgm
   Output: h3Output.pgm, h3Output.txt
+
+Part 4:
+  Input: hough_simple_1.pgm, h3Output.txt
+  Output: h4Output.pgm
