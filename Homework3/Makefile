@@ -17,6 +17,9 @@ LIBS_ALL =  -L/usr/lib -L/usr/local/lib
 image.o: image.cc
 	g++ $(C++FLAG) image.cc -c -o image.o
 
+houghUtils.o: houghUtils.cc
+	g++ $(C++FLAG) houghUtils.cc -c -o houghUtils.o
+	
 h1.o: h1.cc
 	g++ $(C++FLAG) h1.cc -c -o h1.o
 
@@ -38,8 +41,8 @@ h3: h3.o image.o
 h4.o: h4.cc
 	g++ $(C++FLAG) h4.cc -c -o h4.o
 
-h4: h4.o image.o
-	g++ $(C++FLAG) h4.o image.o -o h4
+h4: h4.o image.o houghUtils.o
+	g++ $(C++FLAG) h4.o image.o houghUtils.o -o h4
 
 all:
 	make h1 h2 h3 h4

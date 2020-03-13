@@ -546,6 +546,8 @@ void Image::GenerateHoughImageAndFile(Image &hough_image, const string output_fi
   int rho_buckets = max_rho / d_rho;
   int theta_buckets = 360;
 
+  cout << rho_buckets << " " << theta_buckets << endl;
+
   // create accumulator array A(1..R,1..T)
   // R is number of samples for rho
   // T is number of samples for theta
