@@ -53,7 +53,11 @@ public:
   void SetPixel(size_t i, size_t j, int gray_level)
   {
     if (i >= num_rows_ || j >= num_columns_)
+    {
+      cout << "pixel out of range (set)" << endl;
       abort();
+    }
+
     pixels_[i][j] = gray_level;
   }
 
@@ -61,7 +65,7 @@ public:
   {
     if (i >= num_rows_ || j >= num_columns_)
     {
-      std::cout << "pixel out of range" << std::endl;
+      std::cout << "pixel out of range (get)" << std::endl;
       abort();
     }
     return pixels_[i][j];

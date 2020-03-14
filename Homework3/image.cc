@@ -57,7 +57,11 @@ void Image::DeallocateSpace()
 bool ReadImage(const string &filename, Image *an_image)
 {
   if (an_image == nullptr)
+  {
+    cout << "no image to read" << endl;
     abort();
+  }
+
   FILE *input = fopen(filename.c_str(), "rb");
   if (input == 0)
   {
@@ -152,7 +156,10 @@ bool WriteImage(const string &filename, const Image &an_image)
 void DrawLine(int x0, int y0, int x1, int y1, int color, Image *an_image)
 {
   if (an_image == nullptr)
+  {
+    cout << "no image to draw on" << endl;
     abort();
+  }
 
 #ifdef SWAP
 #undef SWAP
@@ -539,12 +546,12 @@ void Image::GenerateHoughImageAndFile(Image &hough_image, const string output_fi
   // Initialize hough array + image
   int max_rho = sqrt(pow(num_rows(), 2) + pow(num_columns(), 2));
   double max_theta = M_PI;
-  int d_rho = 2;
-  double d_theta = M_PI / 360; // 1 degree in radians
+  int d_rho = 1;
+  double d_theta = M_PI / 180; // 1 degree in radians
 
   // how many samples for rho and theta
   int rho_buckets = max_rho / d_rho;
-  int theta_buckets = 360;
+  int theta_buckets = 180;
 
   cout << rho_buckets << " " << theta_buckets << endl;
 

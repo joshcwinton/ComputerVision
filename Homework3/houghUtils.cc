@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <queue>
 
 using namespace std;
 
@@ -115,6 +116,224 @@ void ThresholdHoughSpace(vector<vector<int>> &hough_array, int threshold)
         hough_array[i][j] = 0;
       }
     }
+  }
+}
+
+vector<vector<int>> GenerateLabelArray(vector<vector<int>> const &hough_array)
+{
+  int current_label = 1;
+  int rows = hough_array.size();
+  int columns = hough_array[0].size();
+  vector<vector<int>> labels;
+  queue<pair<int, int>> label_queue;
+
+  // initialize label vector
+  for (size_t i = 0; i < rows; i++)
+  {
+    vector<int> temp;
+    temp.resize(columns, -1);
+    labels.push_back(temp);
+  }
+
+  // set labels
+  for (size_t i = 0; i < rows; i++)
+  {
+    for (size_t j = 0; j < columns; j++)
+    {
+      size_t current_val = hough_array[i][j];
+
+      // if a bucket has votes and not already labeled
+      if ((current_val > 0) && (labels[i][j] == -1))
+      {
+        // give it current label and add it as the first element in a queue
+        labels[i][j] = current_label;
+        pair<int, int> pixel(i, j);
+        label_queue.push(pixel);
+      }
+      // background pixel or already labeled
+      else
+      {
+        // go to next pixel
+        continue;
+      }
+
+      // pop element from queue and look at its neighbors
+
+      while (!label_queue.empty())
+      {
+        pair<int, int> queue_pixel(label_queue.front());
+        label_queue.pop();
+
+        int up;
+        int down;
+        int left;
+        int right;
+
+        // check for up
+        if (queue_pixel.first > 0)
+        {
+          up = hough_array[queue_pixel.first - 1][queue_pixel.second];
+          if ((up > 0) &&
+              (labels[queue_pixel.first - 1][queue_pixel.second] == -1))
+          {
+            labels[queue_pixel.first - 1][queue_pixel.second] = current_label;
+            pair<int, int> pixel(queue_pixel.first - 1, queue_pixel.second);
+            label_queue.push(pixel);
+          }
+        }
+
+        // check for down
+        if (queue_pixel.first < rows - 1)
+        {
+          down = hough_array[queue_pixel.first + 1][queue_pixel.second];
+          if ((down > 0) &&
+              (labels[queue_pixel.first + 1][queue_pixel.second] == -1))
+          {
+            labels[queue_pixel.first + 1][queue_pixel.second] = current_label;
+            pair<int, int> pixel(queue_pixel.first + 1, queue_pixel.second);
+            label_queue.push(pixel);
+          }
+        }
+
+        // check for left
+        if (queue_pixel.second > 0)
+        {
+          left = hough_array[queue_pixel.first][queue_pixel.second - 1];
+          if ((left > 0) &&
+              (labels[queue_pixel.first][queue_pixel.second - 1] == -1))
+          {
+            labels[queue_pixel.first][queue_pixel.second - 1] = current_label;
+            pair<int, int> pixel(queue_pixel.first, queue_pixel.second - 1);
+            label_queue.push(pixel);
+          }
+        }
+
+        // check for right
+        if (queue_pixel.second < columns - 1)
+        {
+          right = hough_array[queue_pixel.first][queue_pixel.second + 1];
+          if ((right > 0) &&
+              (labels[queue_pixel.first][queue_pixel.second + 1] == -1))
+          {
+            labels[queue_pixel.first][queue_pixel.second + 1] = current_label;
+            pair<int, int> pixel(queue_pixel.first, queue_pixel.second + 1);
+            label_queue.push(pixel);
+          }
+        }
+      }
+      current_label++;
+    }
+  }
+  return labels;
+}
+
+// Given a labeled array for a hough array
+// Create a map from a label to a vector of its points
+void BuildObjectMapFromLabeledArray(const vector<vector<int>> &hough_array, unordered_map<int, vector<pair<int, int>>> &objectMap)
+{
+  // Search for objects, first bucket with vote is first object
+  for (size_t i = 0; i < hough_array.size(); i++)
+  {
+    for (size_t j = 0; j < hough_array[i].size(); j++)
+    {
+      int current_label = hough_array[i][j];
+      pair<int, int> pixel(i, j);
+
+      // If label in hash table, add this pixel to its row
+      if (current_label > 0)
+      {
+        if (objectMap.find(current_label) == objectMap.end())
+        {
+          vector<pair<int, int>> temp;
+          temp.push_back(pixel);
+          objectMap[current_label] = temp;
+        }
+        else
+        {
+          objectMap[current_label].push_back(pixel);
+        }
+      }
+    }
+  }
+}
+
+vector<pair<int, int>> GetCentersFromHoughArrayAndLabels(vector<vector<int>> &hough_array, unordered_map<int, vector<pair<int, int>>> &objectMap)
+{
+  vector<pair<int, int>> centers;
+  vector<int> labels;
+
+  // initialize list of labels
+  for (auto pair : objectMap)
+  {
+    labels.push_back(pair.first);
+  }
+
+  // for each label, get weighted sum of its pixels
+
+  for (auto pair : objectMap)
+  {
+    int rho_sum = 0;
+    int theta_sum = 0;
+    int num_votes = 0;
+
+    // for each pixel, add its position to rho and theta once for each vote
+    for (auto pixel : pair.second)
+    {
+      int rho = pixel.first;
+      int theta = pixel.second;
+      int votes = hough_array[rho][theta];
+
+      num_votes += votes;
+      rho_sum += (votes * rho);
+      theta_sum += (votes * theta);
+    }
+
+    int avg_rho = rho_sum / num_votes;
+    int avg_theta = theta_sum / num_votes;
+
+    // printf("Label: %d \t Rho: %d \t Theta: %d \n", pair.first, avg_rho, avg_theta);
+
+    std::pair<int, int> center(avg_rho, avg_theta);
+    centers.push_back(center);
+  }
+  return centers;
+}
+
+// Takes image dimensions x and y
+// Returns a vector of (x1, y1, x2, y2) lines
+vector<vector<int>> ConvertPolarCentersToLines(vector<pair<int, int>> centers, int rows, int columns)
+{
+  vector<vector<int>> lines;
+  // for each center (rho, theta) determine which image boundaries it intersects
+  for (auto center : centers)
+  {
+    int rho = center.first;
+    int theta = center.second;
+
+    vector<int> line;
+    double a = cos(theta), b = sin(theta);
+    double x0 = a * rho, y0 = b * rho;
+    int x1 = x0 + 10 * (-b);
+    int y1 = y0 + 10 * (a);
+    int x2 = x0 - 10 * (-b);
+    int y2 = y0 - 10 * (a);
+    line.push_back(x1);
+    line.push_back(y1);
+    line.push_back(x2);
+    line.push_back(y2);
+    lines.push_back(line);
+    printf("rho: %d, theta: %d, x1: %f, y0: %f \n", rho, theta, x0, y0);
+  }
+
+  return lines;
+}
+
+void DrawLinesFromVector(vector<vector<int>> lines, Image &an_image)
+{
+  for (size_t i = 0; i < lines.size(); i++)
+  {
+    DrawLine(lines[i][0], lines[i][1], lines[i][2], lines[i][3], 125, &an_image);
+    printf("x1: %d, y1: %d, x2: %d, y2: %d \n", lines[i][0], lines[i][1], lines[i][2], lines[i][3]);
   }
 }
 
