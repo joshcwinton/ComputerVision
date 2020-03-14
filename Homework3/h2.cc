@@ -1,9 +1,7 @@
 /* 
 Author: Josh Winton
 Project: Computer Vision Homework 3
-File: h1.cc
-Purpose: Locates edges in a gray-level image and generates and edge image where
-the intensity at each point is proportional to edge magnitude
+File: h2.cc
 */
 
 #include "image.h"

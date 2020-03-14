@@ -1,8 +1,7 @@
 /* 
 Author: Josh Winton
 Project: Computer Vision Homework 3
-File: h3.cc
-Purpose: ??
+File: h4.cc
 */
 
 #define _USE_MATH_DEFINES
@@ -39,11 +38,6 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  cout << "input_original_image:\t" << input_original_image << endl;
-  cout << "input_hough_array:\t" << input_hough_array << endl;
-  cout << "hough_threshold:\t" << hough_threshold << endl;
-  cout << "output_line_image:\t" << output_line_image << endl;
-
   // Read Hough space into array from file
   vector<vector<int>> hough_array;
   ReadHoughArrayFromTextFile(input_hough_array, &hough_array);
@@ -58,17 +52,6 @@ int main(int argc, char **argv)
   unordered_map<int, vector<pair<int, int>>> objectMap;
   BuildObjectMapFromLabeledArray(label_array, objectMap);
 
-  // DEBUGGING: PRINT OPJECT MAP
-  /*   for (auto pair : objectMap)
-  {
-    cout << pair.first << " ";
-    for (auto const item : pair.second)
-    {
-      cout << "{" << item.first << ":" << item.second << "}";
-    }
-    cout << endl;
-  } */
-
   // For each list of points, calculate its center and keep a list of centers
   vector<pair<int, int>> centers = GetCentersFromHoughArrayAndLabels(hough_array, objectMap);
 
@@ -77,9 +60,6 @@ int main(int argc, char **argv)
 
   // For each center draw a line on original image
   DrawLinesFromVector(lines, an_image);
-
-  WriteHoughArrayToImage(hough_array);
-  WriteHoughArrayToImage(label_array, "labels.pgm");
 
   if (!WriteImage(output_line_image, an_image))
   {

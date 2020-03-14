@@ -54,8 +54,7 @@ public:
   {
     if (i >= num_rows_ || j >= num_columns_)
     {
-      cout << "pixel out of range (set)" << endl;
-      abort();
+      return;
     }
 
     pixels_[i][j] = gray_level;

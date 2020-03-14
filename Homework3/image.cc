@@ -546,14 +546,12 @@ void Image::GenerateHoughImageAndFile(Image &hough_image, const string output_fi
   // Initialize hough array + image
   int max_rho = sqrt(pow(num_rows(), 2) + pow(num_columns(), 2));
   double max_theta = M_PI;
-  int d_rho = 1;
-  double d_theta = M_PI / 180; // 1 degree in radians
+  double d_rho = 0.5;
+  double d_theta = M_PI / 360; // 0.5 degree in radians
 
   // how many samples for rho and theta
   int rho_buckets = max_rho / d_rho;
-  int theta_buckets = 180;
-
-  cout << rho_buckets << " " << theta_buckets << endl;
+  int theta_buckets = 360;
 
   // create accumulator array A(1..R,1..T)
   // R is number of samples for rho
@@ -586,6 +584,47 @@ void Image::GenerateHoughImageAndFile(Image &hough_image, const string output_fi
           int k = rho / d_rho;
           // vote
           hough_array[k][h] += 1;
+          // vote for small surrounding area:
+          // up and left
+          if ((k - 1 >= 0) && (h - 1 >= 0))
+          {
+            hough_array[k - 1][h - 1] += 1;
+          }
+          // up
+          if (k - 1 >= 0)
+          {
+            hough_array[k - 1][h] += 1;
+          }
+          // up and right
+          if ((k - 1 >= 0) && (h + 1 < theta_buckets))
+          {
+            hough_array[k - 1][h + 1] += 1;
+          }
+          // right
+          if (h + 1 < theta_buckets)
+          {
+            hough_array[k][h + 1] += 1;
+          }
+          // down and right
+          if ((k + 1 < rho_buckets) && (h + 1 < theta_buckets))
+          {
+            hough_array[k + 1][h + 1] += 1;
+          }
+          // down
+          if (k + 1 < rho_buckets)
+          {
+            hough_array[k + 1][h] += 1;
+          }
+          // down and left
+          if ((k + 1 < rho_buckets) && (h - 1 >= 0))
+          {
+            hough_array[k + 1][h - 1] += 1;
+          }
+          // left
+          if (h - 1 > 0)
+          {
+            hough_array[k][h - 1] += 1;
+          }
         }
       }
     }

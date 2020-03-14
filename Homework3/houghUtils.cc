@@ -1,3 +1,4 @@
+// Josh Winton
 // Definitions of utilities for finding lines
 // in an image from its Hough transform.
 // Written for Computer Vision Homework 3
@@ -24,8 +25,6 @@ void ReadHoughArrayFromTextFile(string hough_array_file, vector<vector<int>> *re
   {
     getline(textfile, line);
 
-    cout << "array dimensions: " << line << endl;
-
     while (getline(textfile, line))
     {
       vector<int> t;
@@ -37,7 +36,7 @@ void ReadHoughArrayFromTextFile(string hough_array_file, vector<vector<int>> *re
   }
   else
   {
-    cout << "Unable to open file";
+    cout << "Unable to open file: " << hough_array_file;
     abort();
   }
 }
@@ -94,9 +93,6 @@ void WriteHoughArrayToImage(vector<vector<int>> hough_array, string output_file)
 
   // write image to output_file
   an_image.SetNumberGrayLevels(255);
-  WriteImage(output_file, an_image);
-
-  printf("Debug image written to: %s \n", output_file.c_str());
 }
 
 // Takes a hough space and a threshold, only indices with more votes than the threshold kept
@@ -291,8 +287,6 @@ vector<pair<int, int>> GetCentersFromHoughArrayAndLabels(vector<vector<int>> &ho
     int avg_rho = rho_sum / num_votes;
     int avg_theta = theta_sum / num_votes;
 
-    // printf("Label: %d \t Rho: %d \t Theta: %d \n", pair.first, avg_rho, avg_theta);
-
     std::pair<int, int> center(avg_rho, avg_theta);
     centers.push_back(center);
   }
@@ -307,22 +301,22 @@ vector<vector<int>> ConvertPolarCentersToLines(vector<pair<int, int>> centers, i
   // for each center (rho, theta) determine which image boundaries it intersects
   for (auto center : centers)
   {
-    int rho = center.first;
-    int theta = center.second;
+    // scale rho and theta
+    double rho = center.first / (double)2;
+    double theta = center.second * M_PI / (double)360;
 
     vector<int> line;
     double a = cos(theta), b = sin(theta);
     double x0 = a * rho, y0 = b * rho;
-    int x1 = x0 + 10 * (-b);
-    int y1 = y0 + 10 * (a);
-    int x2 = x0 - 10 * (-b);
-    int y2 = y0 - 10 * (a);
+    int x1 = x0 + 1000 * (-b);
+    int y1 = y0 + 1000 * (a);
+    int x2 = x0 - 1000 * (-b);
+    int y2 = y0 - 1000 * (a);
     line.push_back(x1);
     line.push_back(y1);
     line.push_back(x2);
     line.push_back(y2);
     lines.push_back(line);
-    printf("rho: %d, theta: %d, x1: %f, y0: %f \n", rho, theta, x0, y0);
   }
 
   return lines;
@@ -333,7 +327,6 @@ void DrawLinesFromVector(vector<vector<int>> lines, Image &an_image)
   for (size_t i = 0; i < lines.size(); i++)
   {
     DrawLine(lines[i][0], lines[i][1], lines[i][2], lines[i][3], 125, &an_image);
-    printf("x1: %d, y1: %d, x2: %d, y2: %d \n", lines[i][0], lines[i][1], lines[i][2], lines[i][3]);
   }
 }
 

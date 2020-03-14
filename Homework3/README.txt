@@ -1,3 +1,9 @@
+Josh Winton
+Computer Vision Homework 3
+
+NOTE: After running make clean and make all, you can run "make runall" to 
+run all of the programs sequentially on the two simple input images with the same thresholds I used
+
 PARTS COMPLETED
 Part 1: 
   - Program that locates edges in a gray level image and generates an "edge" image where the intensity at each point is proportional to edge magnitude
@@ -16,6 +22,7 @@ Part 4:
   - Uses Image member functions to detect centers of areas of brightness using a given threshold
   - Uses detected centers as lines in the image from its Hough Transform space 
   - Draws the detected lines on a copy of the original scene image
+  - Identifies most straight lines correctly, but angled lines aren't right
 
 INSTRUCTIONS
 Part 1:

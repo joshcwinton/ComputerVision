@@ -1,3 +1,4 @@
+
 #FLAGS
 C++FLAG = -g -std=c++11
 
@@ -49,5 +50,21 @@ all:
 
 clean:
 	(rm -f *.o; rm h1 h2 h3 h4)
+
+runall:
+	make run1
+	make run2
+
+run1:
+	./h1 hough_simple_1.pgm h1Output.1.pgm
+	./h2 h1Output.1.pgm 115 h2Output.1.pgm	
+	./h3 h2Output.1.pgm h3Output.1.pgm h3Output.1.txt
+	./h4 hough_simple_1.pgm h3Output.1.txt 400 h4Output.1.pgm
+
+run2:
+	./h1 hough_simple_2.pgm h1Output.2.pgm
+	./h2 h1Output.2.pgm 115 h2Output.2.pgm	
+	./h3 h2Output.2.pgm h3Output.2.pgm h3Output.2.txt
+	./h4 hough_simple_2.pgm h3Output.2.txt 400 h4Output.2.pgm
 
 (:
