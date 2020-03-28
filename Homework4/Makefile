@@ -18,11 +18,14 @@ LIBS_ALL =  -L/usr/lib -L/usr/local/lib
 image.o: image.cc
 	g++ $(C++FLAG) image.cc -c -o image.o
 
+sphere.o: sphere.cc
+	g++ $(C++FLAG) sphere.cc -c -o sphere.o
+
 s1.o: s1.cc
 	g++ $(C++FLAG) s1.cc -c -o s1.o
 
-s1: s1.o image.o
-	g++ $(C++FLAG) s1.o image.o -o s1
+s1: s1.o image.o sphere.o
+	g++ $(C++FLAG) s1.o image.o sphere.o -o s1
 
 all:
 	make s1
