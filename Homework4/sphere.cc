@@ -130,6 +130,10 @@ vector<double> Sphere::GetNormal(int x_center, int y_center, int radius)
 
   // cout << scaled_x << " " << scaled_y << " " << scaled_z << endl;
 
+  unit_normal.push_back(scaled_x);
+  unit_normal.push_back(scaled_y);
+  unit_normal.push_back(scaled_z);
+
   return unit_normal;
 }
 

@@ -85,9 +85,21 @@ int main(int argc, char **argv)
   }
 
   // calculate output
-  vector<double> normal1 = sphere1.GetNormal(sphere_x_center, sphere_y_center, radius);
-  vector<double> normal2 = sphere2.GetNormal(sphere_x_center, sphere_y_center, radius);
-  vector<double> normal3 = sphere3.GetNormal(sphere_x_center, sphere_y_center, radius);
+  vector<double> normal_1 = sphere1.GetNormal(sphere_x_center, sphere_y_center, radius);
+  vector<double> normal_2 = sphere2.GetNormal(sphere_x_center, sphere_y_center, radius);
+  vector<double> normal_3 = sphere3.GetNormal(sphere_x_center, sphere_y_center, radius);
+
+  // write output to file
+  ofstream output_file(output_directions_file);
+  if (output_file.is_open())
+  {
+    output_file << normal_1[0] << " " << normal_1[1] << " " << normal_1[2] << endl;
+    output_file << normal_2[0] << " " << normal_2[1] << " " << normal_2[2] << endl;
+    output_file << normal_3[0] << " " << normal_3[1] << " " << normal_3[2] << endl;
+    output_file.close();
+  }
+  else
+    cout << "Unable to open output file";
 
   return 0;
 }
