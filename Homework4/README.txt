@@ -1,26 +1,19 @@
+Josh Winton
+Computer Vision Homework 4
 
-Sample code that reads/writes pgm images and that draws lines on the images is provided.
+PARTS COMPLETED
+Part 1: 
+  - Locates the sphere in an image and computes its center and radius
+  - Used threshold=100
+  - Outputs x, y, radius seperated by a space
 
-image.* : Image class (2-D array of integers, along with size, number of colors)
-                      (For our purposes the number of colors is 256)
+INSTRUCTIONS
+Part 1:
+  - make clean
+  - make s1
+  - ./s1 sphere0.pgm 100 s1Output.txt
 
-image_demo.cc : Sample main() function for testing.
-
-----------------------
-To compile in Linux:
-----------
- 
-   make all
-
-To run:
----------
-
-./image_demo objects.pgm objects_output.pgm
-
-This will open image objects.pgm, will draw a line on the image, and will save resulting image to file objects_output.pgm
-
------------
-
-To view .pgm files you can use the open source program gimp:
-
-https://www.gimp.org/
+INPUT/OUTPUT FILES
+Part 1:
+  Input: sphere0.pgm
+  Output: s1Output.txt
