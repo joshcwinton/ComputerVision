@@ -19,6 +19,9 @@ public:
 
   // Given a thresholded binary image with one sphere in it, return the radius of the cirlce
   int GetRadius();
+
+  // Given a center and radius, return a vector representing normal as (x, y, z) with its length as pixel brightness
+  vector<double> GetNormal(int x_center, int y_center, int radius);
 };
 
 } // namespace ComputerVisionProjects

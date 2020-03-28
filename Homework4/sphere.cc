@@ -3,6 +3,9 @@
 // Written by Josh Winton for Computer Vision Homework 4
 
 #include "sphere.h"
+#include <vector>
+#include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -76,4 +79,58 @@ int Sphere::GetRadius()
 
   return avg_radius;
 }
+
+// Given a center and radius, return a vector representing normal as (x, y, z) with its length as pixel brightness
+vector<double> Sphere::GetNormal(int x_center, int y_center, int radius)
+{
+  vector<double> unit_normal;
+  int max_brightness = 0;
+  int bright_x_center;
+  int bright_y_center;
+
+  // Find brightest pixel
+  // Store that pixel and its brightness
+  for (size_t i = 0; i < num_rows(); i++)
+  {
+    for (size_t j = 0; j < num_columns(); j++)
+    {
+      if (GetPixel(i, j) >= max_brightness)
+      {
+        max_brightness = GetPixel(i, j);
+        bright_x_center = j;
+        bright_y_center = i;
+      }
+    }
+  }
+
+  // Find that pixel w.r.t sphere center
+  bright_x_center -= x_center;
+  bright_y_center -= y_center;
+
+  // cout << bright_x_center << " " << bright_y_center << endl;
+
+  // Get the normal at that point
+  double x_component = bright_x_center / (sqrt(pow(radius, 2) - pow(bright_x_center, 2) - pow(bright_y_center, 2)));
+  double y_component = bright_y_center / (sqrt(pow(radius, 2) - pow(bright_x_center, 2) - pow(bright_y_center, 2)));
+
+  // cout << x_component << " " << y_component << endl;
+
+  // Scale it to the unit normal
+  double scaled_x = x_component / sqrt(pow(x_component, 2) + pow(y_component, 2) + 1);
+  double scaled_y = y_component / sqrt(pow(x_component, 2) + pow(y_component, 2) + 1);
+  double scaled_z = 1 / sqrt(pow(x_component, 2) + pow(y_component, 2) + 1);
+
+  // cout << scaled_x << " " << scaled_y << " " << scaled_z << endl;
+
+  // Scale it by the pixel brightness
+
+  scaled_x *= max_brightness;
+  scaled_y *= max_brightness;
+  scaled_z *= max_brightness;
+
+  // cout << scaled_x << " " << scaled_y << " " << scaled_z << endl;
+
+  return unit_normal;
+}
+
 } // namespace ComputerVisionProjects
