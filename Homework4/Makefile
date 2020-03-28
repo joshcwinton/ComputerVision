@@ -27,8 +27,14 @@ s1.o: s1.cc
 s1: s1.o image.o sphere.o
 	g++ $(C++FLAG) s1.o image.o sphere.o -o s1
 
+s2.o: s2.cc
+	g++ $(C++FLAG) s2.cc -c -o s2.o
+
+s2: s2.o image.o sphere.o
+	g++ $(C++FLAG) s2.o image.o sphere.o -o s2
+
 all:
-	make s1
+	make s1 s2
 
 clean:
-	(rm -f *.o; rm s1)
+	(rm -f *.o; rm s1 s2)
