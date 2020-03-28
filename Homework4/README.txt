@@ -7,6 +7,12 @@ Part 1:
   - Used threshold=100
   - Outputs x, y, radius seperated by a space
 
+Part 2: 
+  - Computes directions and intensities of light sources
+  - Using formula n=(-x/√(r-x^2-y^2), -y/√(r-x^2-y^2), 1) to get surface normal at a given point (x, y) centered around the circle center and radius r
+  - Using brightest pixel on spere in each image to find surface normal and illumination intensity
+   
+
 INSTRUCTIONS
 Part 1:
   - make clean
