@@ -21,6 +21,9 @@ image.o: image.cc
 sphere.o: sphere.cc
 	g++ $(C++FLAG) sphere.cc -c -o sphere.o
 
+matrixUtils.o: matrixUtils.cc
+	g++ $(C++FLAG) matrixUtils.cc -c -o matrixUtils.o
+
 s1.o: s1.cc
 	g++ $(C++FLAG) s1.cc -c -o s1.o
 
@@ -33,8 +36,14 @@ s2.o: s2.cc
 s2: s2.o image.o sphere.o
 	g++ $(C++FLAG) s2.o image.o sphere.o -o s2
 
+s3.o: s3.cc
+	g++ $(C++FLAG) s3.cc -c -o s3.o
+
+s3: s3.o 
+	g++ $(C++FLAG) s3.o -o s3
+
 all:
-	make s1 s2
+	make s1 s2 s3
 
 clean:
-	(rm -f *.o; rm s1 s2)
+	(rm -f *.o; rm s1 s2 s3)
