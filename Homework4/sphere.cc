@@ -81,9 +81,9 @@ int Sphere::GetRadius()
 }
 
 // Given a center and radius, return a vector representing normal as (x, y, z) with its length as pixel brightness
-vector<double> Sphere::GetNormal(int x_center, int y_center, int radius)
+vector<int> Sphere::GetNormal(int x_center, int y_center, int radius)
 {
-  vector<double> unit_normal;
+  vector<int> unit_normal;
   int max_brightness = 0;
   int bright_x_center;
   int bright_y_center;
@@ -130,9 +130,9 @@ vector<double> Sphere::GetNormal(int x_center, int y_center, int radius)
 
   // cout << scaled_x << " " << scaled_y << " " << scaled_z << endl;
 
-  unit_normal.push_back(scaled_x);
-  unit_normal.push_back(scaled_y);
-  unit_normal.push_back(scaled_z);
+  unit_normal.push_back((int)scaled_x);
+  unit_normal.push_back((int)scaled_y);
+  unit_normal.push_back((int)scaled_z);
 
   return unit_normal;
 }

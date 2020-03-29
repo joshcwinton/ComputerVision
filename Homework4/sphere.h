@@ -21,7 +21,7 @@ public:
   int GetRadius();
 
   // Given a center and radius, return a vector representing normal as (x, y, z) with its length as pixel brightness
-  vector<double> GetNormal(int x_center, int y_center, int radius);
+  vector<int> GetNormal(int x_center, int y_center, int radius);
 };
 
 } // namespace ComputerVisionProjects
