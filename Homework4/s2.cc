@@ -1,8 +1,8 @@
 /* 
 Author:  Josh Winton
 Project: Computer Vision Homework 4
-File:    s1.cc
-Purpose: Locates sphere in an image and computes its center and radius 
+File:    s2.cc
+Purpose: Calculates lighting directions from 3 images and sphere location information
 */
 #include "image.h"
 #include "sphere.h"
@@ -11,8 +11,6 @@ Purpose: Locates sphere in an image and computes its center and radius
 #include <sstream>
 #include <fstream>
 #include <string>
-// #include <algorithm>
-// #include <iterator>
 #include <vector>
 
 using namespace std;
@@ -85,9 +83,9 @@ int main(int argc, char **argv)
   }
 
   // calculate output
-  vector<double> normal_1 = sphere1.GetNormal(sphere_x_center, sphere_y_center, radius);
-  vector<double> normal_2 = sphere2.GetNormal(sphere_x_center, sphere_y_center, radius);
-  vector<double> normal_3 = sphere3.GetNormal(sphere_x_center, sphere_y_center, radius);
+  vector<int> normal_1 = sphere1.GetNormal(sphere_x_center, sphere_y_center, radius);
+  vector<int> normal_2 = sphere2.GetNormal(sphere_x_center, sphere_y_center, radius);
+  vector<int> normal_3 = sphere3.GetNormal(sphere_x_center, sphere_y_center, radius);
 
   // write output to file
   ofstream output_file(output_directions_file);
