@@ -46,3 +46,20 @@ $ ./s2 s1Output.txt sphere1.pgm sphere2.pgm sphere3.pgm s2Output.txt
 - Given 3 images of an object, compute the normals to that object's surface
 - Used equations on slide 24 of set 11 and followed code from [[https://www.geeksforgeeks.org/adjoint-inverse-matrix/]] to do matrix operations
 
+*** Input/Output Files
+- Input:
+  - s2Output.txt
+  - object1.pgm
+  - object2.pgm
+  - object3.pgm
+  - Step size
+  - Threshold
+- Output:
+  - s3Output.pgm
+
+*** Instructions to Run s3
+#+BEGIN_EXAMPLE
+$ make clean
+$ make s3
+$ ./s3 s2Output.txt object1.pgm object2.pgm object3.pgm 10 75 s3Output.pgm
+#+END_EXAMPLE
