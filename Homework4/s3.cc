@@ -5,8 +5,10 @@ Project: Computer Vision Homework 4
 File:    s3.cc
 Purpose: Calculates surface normals and albedo using 3 images under different lighting conditions
 */
+
 #include "image.h"
 #include "sphere.h"
+#include "matrixUtils.h"
 #include <cstdio>
 #include <iostream>
 #include <sstream>
@@ -15,19 +17,27 @@ Purpose: Calculates surface normals and albedo using 3 images under different li
 // #include <algorithm>
 // #include <iterator>
 #include <vector>
+#include <array>
 
 using namespace std;
 using namespace ComputerVisionProjects;
 
-vector<int> makeVectorFromString(string vector_string)
+array<int, 3> makeArrayFromString(string vector_string)
 {
-  vector<int> vector_array;
+  array<int, 3> vector_array;
   istringstream ss(vector_string);
-  do  {
+
+  for (size_t i = 0; i < 3; i++)
+  {
     string word;
     ss >> word;
-    vector_array.push_back(stoi(word));
-  } while (ss);
+    if (word == "")
+    {
+      break;
+    }
+    vector_array[i] = stoi(word);
+  }
+
   return vector_array;
 }
 
@@ -56,23 +66,23 @@ int main(int argc, char **argv)
   printf("output_filename: \"%s\"\n", output_filename.c_str());
 
   // Read light source directions from file
-  vector<int> s1;              // lighting direction 1
-  vector<int> s2;              // lighting direction 2
-  vector<int> s3;              // lighting direction 2
-  vector<vector<int>> S[3][3]; // [s1, s2, s3]
+  array<int, 3> s1;          // lighting direction 1
+  array<int, 3> s2;          // lighting direction 2
+  array<int, 3> s3;          // lighting direction 2
+  array<array<int, 3>, 3> S; // [s1, s2, s3]
 
   string line;
   ifstream input_directions_file(input_directions_filename);
   if (input_directions_file.is_open())
   {
     getline(input_directions_file, line);
-    s1 = makeVectorFromString(line);
-    cout << s1[0] << ' ' << s1[1] << ' ' << s1[2] << endl;
-    getline(input_directions_file, line);
-    s2 = makeVectorFromString(line);
+    s1 = makeArrayFromString(line);
 
     getline(input_directions_file, line);
-    s2 = makeVectorFromString(line);
+    s2 = makeArrayFromString(line);
+
+    getline(input_directions_file, line);
+    s3 = makeArrayFromString(line);
 
     input_directions_file.close();
   }
@@ -81,7 +91,33 @@ int main(int argc, char **argv)
     printf("Unable to open file \"%s\"", input_directions_filename.c_str());
   }
 
+  // Create matrix S
+  S[0] = s1;
+  S[1] = s2;
+  S[2] = s3;
+
+  array<array<double, 3>, 3> S_inverse;
+
+  // Find S inverse
+  // inverse(S, S_inverse);
+
+  for (int i = 0; i < 3; i++)
+  {
+    for (int j = 0; j < 3; j++)
+    {
+      // cout << S_inverse[i] << " ";
+    }
+    cout << endl;
+  }
+
   // Read image files into Image objects
+  Image image1;
+  Image image2;
+  Image image3;
+
+  // ReadImage(image_1_filename, &image1);
+  // ReadImage(image_2_filename, &image2);
+  // ReadImage(image_3_filename, &image3);
 
   // Generate 3D object
 
