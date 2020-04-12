@@ -1,6 +1,6 @@
 
 #FLAGS
-C++FLAG = -g -std=c++11
+C++FLAG = -g -std=c++11 -Wall
 
 MATH_LIBS = -lm
 
