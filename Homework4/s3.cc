@@ -110,9 +110,9 @@ int main(int argc, char **argv)
   Image image2;
   Image image3;
 
-  // ReadImage(image_1_filename, &image1);
-  // ReadImage(image_2_filename, &image2);
-  // ReadImage(image_3_filename, &image3);
+  ReadImage(image_1_filename, &image1);
+  ReadImage(image_2_filename, &image2);
+  ReadImage(image_3_filename, &image3);
 
   // Generate 3D object
 
