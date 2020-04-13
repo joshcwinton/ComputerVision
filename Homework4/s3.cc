@@ -99,15 +99,10 @@ int main(int argc, char **argv)
   array<array<double, 3>, 3> S_inverse;
 
   // Find S inverse
-  // inverse(S, S_inverse);
-
-  for (int i = 0; i < 3; i++)
+  if (!inverse(S, S_inverse))
   {
-    for (int j = 0; j < 3; j++)
-    {
-      // cout << S_inverse[i] << " ";
-    }
-    cout << endl;
+    cout << "singular" << endl;
+    return 1;
   }
 
   // Read image files into Image objects
