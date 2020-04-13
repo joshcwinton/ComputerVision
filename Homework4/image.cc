@@ -170,9 +170,7 @@ void DrawLine(int x0, int y0, int x1, int y1, int color,
   // Increments: East, North-East, South, South-East, North.
   int incrE,
       incrNE,
-      incrS,
-      incrSE,
-      incrN;
+      incrSE;
   int d;      /* the D */
   int x, y;   /* running coordinates */
   int mpCase; /* midpoint algorithm's case */
