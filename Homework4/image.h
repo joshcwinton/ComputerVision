@@ -31,7 +31,7 @@ public:
   Image(const Image &an_image);
   Image &operator=(const Image &an_image) = delete;
 
-  // ~Image();
+  ~Image();
 
   // Sets the size of the image to the given
   // height (num_rows) and columns (num_columns).
