@@ -50,7 +50,7 @@ public:
   void SetPixel(size_t i, size_t j, int gray_level)
   {
     if (i >= num_rows_ || j >= num_columns_)
-      abort();
+      return;
     pixels_[i][j] = gray_level;
   }
 
