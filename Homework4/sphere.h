@@ -6,6 +6,7 @@
 #define COMPUTER_VISION_SPHERE_H_
 
 #include "image.h"
+#include <vector>
 
 using namespace std;
 
