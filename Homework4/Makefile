@@ -45,6 +45,9 @@ s3.o: s3.cc
 s3: s3.o matrixUtils.o image.o stereoObject.o
 	g++ $(C++FLAG) s3.o matrixUtils.o image.o stereoObject.o -o s3
 
+s4.o: s4.cc
+	g++ $(C++FLAG) s4.cc -c -o s4.o
+
 s4: s4.o matrixUtils.o image.o stereoObject.o
 	g++ $(C++FLAG) s4.o matrixUtils.o image.o stereoObject.o -o s4
 
