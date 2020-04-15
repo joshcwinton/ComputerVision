@@ -97,4 +97,4 @@ _________________
 
   - Given 3 images of an object, compute the normals to that object's
     surface
-  - 
+  - ./s3 s2Output.txt object1.pgm object2.pgm object3.pgm 10 75 s3Output.pgm 
