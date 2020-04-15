@@ -66,6 +66,20 @@ StereoObject::StereoObject(Image *image_1, Image *image_2, Image *image_3, array
   calcAlbedos();
 }
 
+StereoObject::StereoObject(Image *image_1, Image *image_2, Image *image_3, array<array<double, 3>, 3> S_inverse, int threshold)
+{
+  threshold_ = threshold;
+  step_size_ = 1;
+
+  image_1_ = image_1;
+  image_2_ = image_2;
+  image_3_ = image_3;
+
+  S_inverse_ = S_inverse;
+
+  calcAlbedos();
+}
+
 void StereoObject::calcNormals()
 {
   // initialize normals_

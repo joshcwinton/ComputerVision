@@ -18,6 +18,9 @@ class StereoObject
 public:
   StereoObject(Image *image_1, Image *image_2, Image *image_3, array<array<double, 3>, 3> S_inverse, int step_size, int threshold);
 
+  // constructor without step for s4
+  StereoObject(Image *image_1, Image *image_2, Image *image_3, array<array<double, 3>, 3> S_inverse, int threshold);
+
   vector<vector<array<double, 3>>> getNormals();
   vector<vector<int>> getAlbedos();
   void drawNormals(Image *normals_image);
