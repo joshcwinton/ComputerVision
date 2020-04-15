@@ -24,6 +24,9 @@ sphere.o: sphere.cc
 matrixUtils.o: matrixUtils.cc
 	g++ $(C++FLAG) matrixUtils.cc -c -o matrixUtils.o
 
+stereoObject.o: stereoObject.cc
+	g++ $(C++FLAG) stereoObject.cc -c -o stereoObject.o
+
 s1.o: s1.cc
 	g++ $(C++FLAG) s1.cc -c -o s1.o
 
@@ -39,8 +42,8 @@ s2: s2.o image.o sphere.o
 s3.o: s3.cc
 	g++ $(C++FLAG) s3.cc -c -o s3.o
 
-s3: s3.o matrixUtils.o image.o
-	g++ $(C++FLAG) s3.o matrixUtils.o image.o -o s3
+s3: s3.o matrixUtils.o image.o stereoObject.o
+	g++ $(C++FLAG) s3.o matrixUtils.o image.o stereoObject.o -o s3
 
 all:
 	make s1 s2 s3
