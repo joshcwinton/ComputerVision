@@ -11,6 +11,7 @@
 *** Input/Output Files
 - Input:
   - sphere0.pgm
+  - Threshold: 100
 - Output:
   - s1Output.txt
 
