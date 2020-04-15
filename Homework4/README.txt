@@ -44,6 +44,7 @@ _________________
 
   - Input:
     - sphere0.pgm
+    - Threshold: 100
   - Output:
     - s1Output.txt
 
@@ -116,7 +117,7 @@ _________________
     - object2.pgm
     - object3.pgm
     - Step size: 10
-    - Threshold: 75
+    - Threshold: 110
   - Output:
     - s3Output.pgm
 
@@ -127,7 +128,7 @@ _________________
   ,----
   | $ make clean
   | $ make s3
-  | $ ./s3 s2Output.txt object1.pgm object2.pgm object3.pgm 10 75 s3Output.pgm
+  | $ ./s3 s2Output.txt object1.pgm object2.pgm object3.pgm 10 110 s3Output.pgm
   `----
 
 

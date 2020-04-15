@@ -55,7 +55,7 @@ $ ./s2 s1Output.txt sphere1.pgm sphere2.pgm sphere3.pgm s2Output.txt
   - object2.pgm
   - object3.pgm
   - Step size: 10
-  - Threshold: 75
+  - Threshold: 110
 - Output:
   - s3Output.pgm
 
@@ -63,7 +63,7 @@ $ ./s2 s1Output.txt sphere1.pgm sphere2.pgm sphere3.pgm s2Output.txt
 #+BEGIN_EXAMPLE
 $ make clean
 $ make s3
-$ ./s3 s2Output.txt object1.pgm object2.pgm object3.pgm 10 75 s3Output.pgm
+$ ./s3 s2Output.txt object1.pgm object2.pgm object3.pgm 10 110 s3Output.pgm
 #+END_EXAMPLE
 
 ** Albedo (s4)
