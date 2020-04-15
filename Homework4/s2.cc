@@ -12,6 +12,7 @@ Purpose: Calculates lighting directions from 3 images and sphere location inform
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iterator>
 
 using namespace std;
 using namespace ComputerVisionProjects;
