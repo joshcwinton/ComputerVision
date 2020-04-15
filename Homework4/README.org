@@ -1,3 +1,4 @@
+
 #+TITLE: Computer Vision Homework 4
 #+AUTHOR: Josh Winton
 
@@ -44,7 +45,7 @@ $ ./s2 s1Output.txt sphere1.pgm sphere2.pgm sphere3.pgm s2Output.txt
 
 ** Surface Normals (s3)
 - Given 3 images of an object, compute the normals to that object's surface
-- Used equations on slide 24 of set 11 and followed code from [[https://www.geeksforgeeks.org/adjoint-inverse-matrix/]] to do matrix operations
+- Used equations on slide 24 of set 11 and followed code from [[https://www.geeksforgeeks.org/adjoint-inverse-matrix/]] to do matrix inversion
 
 *** Input/Output Files
 - Input:
@@ -52,8 +53,8 @@ $ ./s2 s1Output.txt sphere1.pgm sphere2.pgm sphere3.pgm s2Output.txt
   - object1.pgm
   - object2.pgm
   - object3.pgm
-  - Step size
-  - Threshold
+  - Step size: 10
+  - Threshold: 75
 - Output:
   - s3Output.pgm
 
@@ -62,4 +63,25 @@ $ ./s2 s1Output.txt sphere1.pgm sphere2.pgm sphere3.pgm s2Output.txt
 $ make clean
 $ make s3
 $ ./s3 s2Output.txt object1.pgm object2.pgm object3.pgm 10 75 s3Output.pgm
+#+END_EXAMPLE
+
+** Albedo (s4)
+- Given 3 images of an object, compute the albedo at each pixel
+- Used the same equations from s3
+
+*** Input/Output Files
+- Input:
+  - s2Output.txt
+  - object1.pgm
+  - object2.pgm
+  - object3.pgm
+  - Threshold: 90
+- Output:
+  - s4Output.pgm
+
+*** Instructions to Run s4
+#+BEGIN_EXAMPLE
+$ make clean
+$ make s4
+$ ./s4 s2Output.txt object1.pgm object2.pgm object3.pgm 90 s4Output.pgm
 #+END_EXAMPLE
