@@ -9,13 +9,12 @@ Purpose: Calculates surface normals and albedo using 3 images under different li
 #include "image.h"
 #include "sphere.h"
 #include "matrixUtils.h"
+#include "stereoObject.h"
 #include <cstdio>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <string>
-// #include <algorithm>
-// #include <iterator>
 #include <vector>
 #include <array>
 
@@ -115,8 +114,17 @@ int main(int argc, char **argv)
   ReadImage(image_3_filename, &image3);
 
   // Generate 3D object
+  StereoObject myObject = StereoObject(&image1, &image2, &image3, S_inverse, step, threshold);
+  Image output_image;
+
+  myObject.drawNormals(&output_image);
 
   // Write 3D object with normals to image
+  if (!WriteImage(output_filename, output_image))
+  {
+    cout << "Can't write to file " << output_filename << endl;
+    return 0;
+  }
 
   return 0;
 }
