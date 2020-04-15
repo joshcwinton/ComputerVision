@@ -45,8 +45,11 @@ s3.o: s3.cc
 s3: s3.o matrixUtils.o image.o stereoObject.o
 	g++ $(C++FLAG) s3.o matrixUtils.o image.o stereoObject.o -o s3
 
+s4: s4.o matrixUtils.o image.o stereoObject.o
+	g++ $(C++FLAG) s4.o matrixUtils.o image.o stereoObject.o -o s4
+
 all:
-	make s1 s2 s3
+	make s1 s2 s3 s4
 
 clean:
-	(rm -f *.o; rm s1 s2 s3)
+	(rm -f *.o; rm s1 s2 s3 s4)
